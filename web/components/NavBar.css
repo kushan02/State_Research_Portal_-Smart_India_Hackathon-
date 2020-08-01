@@ -1,0 +1,44 @@
+.nav-bar {
+  /* background-color: blue; */
+  height: 60px;
+  line-height: 60px;
+  border-bottom: 1px solid rgb(235, 235, 235);
+  background-color: white;
+  user-select: none; 
+
+}
+.nav-bar-logo {
+  /* margin-top: 10px; */
+  /* position: relative; */
+}
+.logo-text{
+  color: #788b9c;
+}
+.nav-bar-logo:hover{
+  cursor: pointer;
+  /* margin-top: 10px; */
+  /* position: relative; */
+}
+.nav-bar-logo svg {
+  margin: 12px;
+  margin-left: 30px;
+  float: left;
+
+}
+.nav-bar-logo .logo-text {
+  float: left;
+  /* margin: 15px; */
+
+}
+nav .navbar-right-element {
+    float: right;
+    color:#237aaa ;
+    font-size: 13px;
+    margin-right: 20px;
+    /* vertical-align: middle; */
+}
+nav .nav-sign-up span{
+    border: 1px solid #237aaa;
+    padding: 10px;
+    border-radius: 5px;
+}

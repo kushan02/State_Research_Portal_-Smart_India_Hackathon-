@@ -7,6 +7,7 @@ import Footer from "./Footer.jsx";
 import { Input } from "antd";
 import { useHistory } from "react-router-dom";
 
+
 import {
   ReactiveBase,
   DataSearch,
@@ -17,8 +18,12 @@ import {
   ResultList
 } from "@appbaseio/reactivesearch";
 
+import background from '../assets/background.jpg'
+
 import { withRouter } from "react-router-dom";
 const { Search } = Input;
+
+// const background = require('../assets/background.jpg');
 
 class Home extends Component {
   state = {
@@ -43,31 +48,24 @@ class Home extends Component {
   render() {
     return (
       <React.Fragment>
+        <div style={{position:"absolute",width:"100%"}}>
+
         <NavBar />
-        <div className="home-center-element">
+        </div>
+        <div className="home-center-element"  >
           <div className="center-container">
             <h1>Research Papers</h1>
             <h2>
               Find research from the world's most trusted sources
             </h2>
             <div className="search-bar">
-              {/* <ReactiveBase
+              <ReactiveBase
                 app="research-portal"
                 credentials="GqA01As7V:c544b036-d3a0-4725-acd5-4d1b31b7b5cc"
                 url="https://scalr.api.appbase.io"
                 analytics={true}
                 searchStateHeader
-              > */}
-              <ReactiveBase
-            url="http://localhost:9200"
-            app="research_portal_cleaned"
-
-            // app="research-portal"
-            // credentials="GqA01As7V:c544b036-d3a0-4725-acd5-4d1b31b7b5cc"
-            // url="https://scalr.api.appbase.io"
-            // analytics={true}
-            searchStateHeader
-          >
+              >
                 <DataSearch
                   onValueChange={this.onSearchValueChange}
                   onKeyDown={this.handleKey}
