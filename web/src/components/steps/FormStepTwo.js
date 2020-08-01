@@ -26,10 +26,10 @@ const { Option } = Select;
 class Details extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
-    this.props.handleSecondFormSubmit();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log("Received values of form: ", values);
+        this.props.handleSecondFormSubmit();
       }
     });
   };

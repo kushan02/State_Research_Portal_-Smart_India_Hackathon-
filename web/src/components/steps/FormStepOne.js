@@ -9,10 +9,10 @@ class NormalLoginForm extends React.Component {
     // alert("child")
 
    e.preventDefault();
-   this.props.handleFirstFormSubmit()
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: child ', values);
+   this.props.form.validateFields((err, values) => {
+     if (!err) {
+       this.props.handleFirstFormSubmit();
+       console.log('Received values of form: child ', values);
       }
     });
   };

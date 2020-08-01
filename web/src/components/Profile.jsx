@@ -27,6 +27,7 @@ class Sider extends React.Component {
         <div className="profile-left">
           <Menu
             onClick={this.handleClick}
+            className="vertical-menu"
             style={{ width: "100%" }}
             defaultSelectedKeys={["1"]}
             defaultOpenKeys={["1"]}
@@ -50,16 +51,43 @@ class Sider extends React.Component {
                 <span>Security</span>
               </Link>
             </Menu.Item>
-            {/* <Menu.Item key="4">
-              <Link to="/profile/email">
-                <Icon type="mail" />
-                <span>Email</span>
-              </Link>
-            </Menu.Item> */}
             <Menu.Item key="5">
               <Link to="/profile/security-log">
                 <Icon type="calendar" />
                 <span>Security Log</span>
+              </Link>
+            </Menu.Item>
+          </Menu>
+          <Menu
+            onClick={this.handleClick}
+            style={{ width: "100%" }}
+            className="horizontal-menu"
+            defaultSelectedKeys={["1"]}
+            defaultOpenKeys={["1"]}
+            mode="horizontal"
+          >
+            <Menu.Item key="1">
+              <Link to="/profile/info">
+                <Icon type="appstore" />
+                {/* <span>Profile</span> */}
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="2">
+              <Link to="/profile/account">
+                <Icon type="desktop" />
+                {/* <span>Account</span> */}
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="3">
+              <Link to="/profile/security">
+                <Icon type="setting" />
+                {/* <span>Security</span> */}
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="5">
+              <Link to="/profile/security-log">
+                <Icon type="calendar" />
+                {/* <span>Security Log</span> */}
               </Link>
             </Menu.Item>
           </Menu>
