@@ -150,3 +150,10 @@ mappings = {
 es.indices.create(index='research_portal', ignore=400, body=mappings)
 # curl -XGET localhost:9200/_cat/indices?v
 # ^ Get size of each index
+
+# Load the data from file to database
+es_add_bulk("/home/kushan/Development/Python/Projects/SIH 2020 Research Portal/ElasticSearch_Insertion/cleaned-test/cleaned_records.txt")
+
+_execution_time = round(time.time() - start_time, 2) # in seconds
+print("Execution Time: --- %s minutes (%s seconds) ---" % (round(_execution_time/60,2) , _execution_time))
+
