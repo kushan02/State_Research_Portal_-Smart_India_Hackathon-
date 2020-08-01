@@ -2,12 +2,76 @@ import React, {Component} from "react";
 import NavBar from "./navbar/NavBar.jsx";
 import Footer from "./footer/Footer.jsx";
 import "./Papers.css";
+import constants from "../constants";
+import axios from "axios";
+import {Tag, Table, Button, Row, Col} from "antd";
+import {Card} from "antd";
 import {Layout, Menu, Breadcrumb} from 'antd';
 // import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 
 const {SubMenu} = Menu;
 const {Header, Content, Sider} = Layout;
 
+const columns = [
+    {
+        title: 'Paper Title',
+        dataIndex: 'papers',
+        filters: [
+      {
+        text: 'Joe',
+        value: 'Joe',
+      },
+      {
+        text: 'Jim',
+        value: 'Jim',
+      },
+    ],
+    onFilter: (value, record) => record.papers.indexOf(value) === 0,
+    sorter: (a, b) => a.papers.length - b.papers.length,
+    sortDirections: ['descend','ascend'],
+  },
+  {
+    title: 'Citations',
+    dataIndex: 'citations',
+    defaultSortOrder: 'descend',
+    sorter: (a, b) => a.citations - b.citations,
+  },
+  {
+    title: 'Year',
+    dataIndex: 'year',
+    sorter: (a, b) => a.year - b.year,
+    sortDirections: ['descend','ascend'],
+  },
+];
+
+ const data1 = [
+  {
+      key: '1',
+      papers: 'Text Extraction from Book Cover Using MSER',
+      citations: 7,
+      year: 2019,
+  }
+];
+
+function onChange(pagination, filters, sorter, extra) {
+  console.log('params', pagination, filters, sorter, extra);
+}
+export class Papers extends Component {
+  state = {
+    data: []
+
+  };
+
+
+  componentDidMount() {
+      axios
+      .get(constants.elasticSearchUrl+  constants.elasticSearchAppName +"/_search?q=deep learning")
+      .then(res =>{
+        console.log(res.data.hits.hits);
+        this.setState({ data: res.data.hits.hits });
+      })
+      .catch(err => console.error(err));
+  }
 
 
 
