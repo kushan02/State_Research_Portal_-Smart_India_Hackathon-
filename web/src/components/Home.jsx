@@ -1,19 +1,19 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 
 import "./Home.css";
 
-import NavBar from "./NavBar.jsx";
-import Footer from "./Footer.jsx";
-import { Input } from "antd";
-import { useHistory } from "react-router-dom";
+import NavBar from "./navbar/NavBar.jsx";
+import Footer from "./footer/Footer.jsx";
+import {Input} from "antd";
+import {useHistory} from "react-router-dom";
 
 import {
-  ReactiveBase,
-  DataSearch,
-  MultiList,
-  SelectedFilters,
-  ReactiveList,
-  DynamicRangeSlider,
+    ReactiveBase,
+    DataSearch,
+    MultiList,
+    SelectedFilters,
+    ReactiveList,
+    DynamicRangeSlider,
   ResultList
 } from "@appbaseio/reactivesearch";
 

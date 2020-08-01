@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import "./ProfileComponents.css"
 
-import Account from"./Account"
-import Info from"./Info"
-import ChangePassword from"./ChangePassword"
+import Account from"./profile/Account"
+import Info from"./profile/Info"
+import ChangePassword from"./profile/ChangePassword"
 import Email from"./Email"
-import SecurityLog from"./SecurityLog"
+import SecurityLog from"./profile/SecurityLog"
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
