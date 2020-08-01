@@ -20,6 +20,10 @@ def connect_elasticsearch(url = 'localhost', port = 9200):
 
 es = connect_elasticsearch()
 
+def delete_index(index):
+    es.indices.delete(index=index, ignore=[400, 404])
+# delete_index("research_portal")
+
 
 def yield_record(file_path, encoding="utf8"):
     line_counter = 0
