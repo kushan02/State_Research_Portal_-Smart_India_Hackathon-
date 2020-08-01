@@ -8,44 +8,30 @@ import re
 
 registration_bp = Blueprint('registration_bp', __name__)
 
-@api_bp.route('/reg', methods=['GET', 'POST'])
-def data_reg():
-    if request.method == 'POST':
 
-        data = (request.json)
-        print(data)
-        if data['fname'] == '' or data['email'] == '' or data['password'] == '' or data['cpass'] == '' or data['city'] == '' or data['institute'] == '':
-            bool_no_null_input = False
-        else:
-            bool_no_null_input = True
+# CORS(registration_bp, resources={r'/api/*': {"origins": "*"}})
 
-        # Email Validation
-        e_mail = data['email']
 
-        regex_email = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
-        if re.search(regex_email,e_mail):
-            bool_valid_email = True
-        else:
-            bool_valid_email = False
+@registration_bp.route('/api/registration/', methods=['POST'])
+def register_user():
+    data = (request.json)
+    print(data)
+    for field in data:
+        if field in ['name', 'email', 'password', 'city', 'institute']:
+            # Check if the data field is not empty
+            if not data[field]:
+                return 'Please fill the required fields!', 400
 
-        #password validation
-        pass_hash = bcrypt.generate_password_hash(data['password'])
-        print(pass_hash)
-        pass_hash = pass_hash.decode("utf-8")
-        conf_pass = data['cpass']
-
-        if bcrypt.check_password_hash(pass_hash,conf_pass):
-            bool_valid_pass = True
-        else:
-            bool_valid_pass = False
-
-        # phone number validation
-        p_no = data['phone_number']
+    # phone number validation
+    if data['phone_number']:
         regex_p_no = re.compile('[6-9][0-9]{9}')
-        bool_valid_phone = bool(re.match(regex_p_no, p_no))
+        is_valid_phone = bool(re.match(regex_p_no, data['phone_number']))
+        if not is_valid_phone:
+            return 'Phone number invalid', 400
 
-        # homepage url validation
-        hp_url = data['hp']
+    # homepage url validation
+    if data['homepage']:
+        homepage = data['homepage']
         regex_hp = re.compile(
             r'^(?:http|ftp)s?://'  # http:// or https://
             r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
@@ -53,36 +39,48 @@ def data_reg():
             r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
             r'(?::\d+)?'  # optional port
             r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+        is_valid_homepage = bool(re.match(regex_hp, homepage))
+        if not is_valid_homepage:
+            return 'Homepage URL invalid', 400
 
-        bool_valid_hp = bool(re.match(regex_hp, hp_url))
+    # Email Validation
+    regex_email = re.compile('^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$')
+    is_valid_email = bool(re.match(regex_email, data['email']))
+    if not is_valid_email:
+        return 'Email address is invalid', 400
 
-        regex_email = re.compile('^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$')
-        bool_valid_email = bool(re.match(regex_email, e_mail))
+        # password validation
+    pass_hash = flask_bcrypt.generate_password_hash(data['password'])
+    pass_hash = pass_hash.decode("utf-8")
 
+    # Establish database connection
+    db = pymysql.connect("156.67.222.22", "u133349638_sih_team", "?/lL@YA$", "u133349638_researchportal")
+    cursor = db.cursor()
+    params = [data['email']]
+    count = cursor.execute('SELECT user_email FROM account WHERE user_email=%s', params)
+    if count > 0:
+        cursor.close()
+        db.close()
+        return 'Email address already exists! Please logging in.', 409
 
-        print(bool_valid_email)
-        print(bool_valid_pass)
+    cursor.close()
+    cursor = db.cursor()
 
-
-        # if bool_valid_email == True and bool_valid_pass == True and bool_no_null_input == True:
-            if bool_valid_email == True and bool_valid_pass == True and bool_no_null_input == True and bool_valid_phone == True and bool_valid_hp == True:
-            sql = "INSERT INTO users(NAME, EMAIL, PASSWORD, INSTITUTE, CITY, HOMEPAGE, BIO, PHONE_NUMBER) VALUES" + "(" + "'" + (
-                str(data['fname'])) + "'" + "," + "'" + (str(data['email'])) + "'" + "," + "'" + (
-                      str(pass_hash)) + "'" + "," + "'" + (
-                      str(data['institute'])) + "'" + "," + "'" + (str(data['city'])) + "'" + "," + "'" + (
-                      str(data['hp'])) + "'" + "," + "'" + (
-                      str(data['bio'])) + "'" + "," + "'" + (str(data['phone_number'])) + "'" + ")"
-            print(sql)
-            try:
-                cursor.execute(sql)
-                db.commit()
-            except:
-                db.rollback()
-        else:
-            return abort(404,'Wrong/Invalid Data')
-
-
-        cursor.execute("select * from users")
-        data = cursor.fetchall()
-        print(data)
-    return "registered"
+    # use prepared statement to avoid sql injection
+    try:
+        params = [
+            data['email'], data['name'], pass_hash, data['institute'], data['city'], data['homepage'],
+            data['phone_number'], data['interests']
+        ]
+        sql = cursor.execute(
+            "INSERT INTO `account` (`user_email`, `user_name`, `user_password`, `user_institute`, `user_city`, `user_homepage`, `user_phone_number`, `user_interests`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
+            params)
+        db.commit()
+        cursor.close()
+        db.close()
+        return 'Your account has been successfully created!', 200
+    except:
+        db.rollback()
+        cursor.close()
+        db.close()
+        return 'Error in registration occurred!', 400
