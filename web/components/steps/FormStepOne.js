@@ -3,11 +3,16 @@ import {Button, Checkbox, Form, Icon, Input, Divider} from "antd";
 import ReactDOM from 'react-dom'
 
 class NormalLoginForm extends React.Component {
+  state={
+  }
   handleSubmit = e => {
-    e.preventDefault();
+    // alert("child")
+
+   e.preventDefault();
+   this.props.handleFirstFormSubmit()
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        console.log('Received values of form: child ', values);
       }
     });
   };
@@ -16,7 +21,9 @@ class NormalLoginForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
     const responseGoogle = (response) => {console.log(response);};
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form" style={{ width : '50%' , margin : 'auto', paddingTop: '1%', paddingBottom: '5%'}}>
+      <Form
+       onSubmit={this.handleSubmit} 
+       className="login-form" style={{ width : '50%' , margin : 'auto', paddingTop: '1%', paddingBottom: '5%'}}>
                 {/*Paper title*/}
         <Form.Item>
           {getFieldDecorator('title', {
@@ -45,6 +52,14 @@ class NormalLoginForm extends React.Component {
             Lookup Paper
           </Button>
         </Form.Item>
+        {/* <Form.Item wrapperCol={{ span: 100 }}> */}
+        <div style={{textAlign:"center"}}>
+         
+            <Button type="primary"  htmlType="submit" loading={this.props.buttonLoading} >
+          Next
+        </Button>
+            </div>
+          {/* </Form.Item> */}
       </Form>
     );
   }
