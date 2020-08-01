@@ -34,7 +34,14 @@ class RegistrationForm extends React.Component {
     state = {
         confirmDirty: false,
         autoCompleteResult: [],
-        tags: []
+        fname : '',
+        email:'',
+        password:'',
+        institute:'',
+        city:'',
+        phone_number:'',
+        bio:'',
+        hp:''
     };
     handleDelete = (i) => {
         const { tags } = this.state;
