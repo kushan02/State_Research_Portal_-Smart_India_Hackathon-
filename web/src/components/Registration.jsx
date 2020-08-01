@@ -90,34 +90,40 @@ class RegistrationForm extends React.Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-                axios.post(constants.flaskServerUrl + "registration/", {
-                    fname: values.name,
-                    password: values.password,
-                    email: values.email,
-                    institute: values.institute,
-                    city: values.city,
-                    phone_number: values.phone || "",
-                    bio: values.bio || "",
-                    hp: values.homepage || ""
-                }).then(res => {
-                    message.success(res.data);
-                    console.log(res);
-                    console.log(res.data);
-                }).catch(function (error) {
-                    if (error.response) {
-                        message.error(error.response.data);
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-                    }
-                });
-                console.log("Received values of form: ", values);
-            } else {
-                window.scroll({ top: 0, left: 0, behavior: 'smooth' });
-            }
-        });
+            const {fname, password,cpass, email, institute, city, phone_number,bio,hp} = this.state;
+    axios.post(`http://localhost:5000/reg`, {fname, password,cpass, email, institute, city, phone_number,bio,hp})
+            .then(res => {
+                console.log(res);
+                console.log(res.data);
+            });
+        // this.props.form.validateFieldsAndScroll((err, values) => {
+        //     if (!err) {
+        //         axios.post(constants.flaskServerUrl + "registration/", {
+        //             fname: values.name,
+        //             password: values.password,
+        //             email: values.email,
+        //             institute: values.institute,
+        //             city: values.city,
+        //             phone_number: values.phone || "",
+        //             bio: values.bio || "",
+        //             hp: values.homepage || ""
+        //         }).then(res => {
+        //             message.success(res.data);
+        //             console.log(res);
+        //             console.log(res.data);
+        //         }).catch(function (error) {
+        //             if (error.response) {
+        //                 message.error(error.response.data);
+        //                 console.log(error.response.data);
+        //                 console.log(error.response.status);
+        //                 console.log(error.response.headers);
+        //             }
+        //         });
+        //         console.log("Received values of form: ", values);
+        //     } else {
+        //         window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+        //     }
+        // });
     };
 
     handleConfirmBlur = e => {
