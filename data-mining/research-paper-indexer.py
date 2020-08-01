@@ -152,7 +152,19 @@ es.indices.create(index='research_portal', ignore=400, body=mappings)
 # ^ Get size of each index
 
 # Load the data from file to database
-es_add_bulk("/home/kushan/Development/Python/Projects/SIH 2020 Research Portal/ElasticSearch_Insertion/cleaned-test/cleaned_records.txt")
+# es_add_bulk("/home/kushan/Development/Python/Projects/SIH 2020 Research Portal/ElasticSearch_Insertion/cleaned-test/cleaned_records.txt")
+for file_number in range(0, 54):
+    file_name = "clean-corpus-{}".format(file_number)
+    if file_number < 10:
+        file_name = "clean-corpus-0{}".format(file_number)
+
+    file_name = "/data/cleaned/" + file_name
+
+    print(file_name)
+    print("")
+
+    es_add_bulk(file_name)
+
 
 _execution_time = round(time.time() - start_time, 2) # in seconds
 print("Execution Time: --- %s minutes (%s seconds) ---" % (round(_execution_time/60,2) , _execution_time))
