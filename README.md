@@ -2,8 +2,6 @@
 SIH 2020 - State Research Portal - KB141 Problem Statement (Team_Envyus)
 
 
-# NC_CMRCET_KB141_Team_Envyus
-
 
 ### Organization: 
 Government of Andhra Pradesh
