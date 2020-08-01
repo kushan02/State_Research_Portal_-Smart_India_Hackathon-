@@ -9,4 +9,4 @@ def hello_world():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True, use_reloader=True, port=5000, threaded=True)
