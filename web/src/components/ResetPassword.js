@@ -1,20 +1,20 @@
 import React from "react";
 // import './welc.css'
-import { Button, Form, Input } from "antd";
+import {Button, Form, Input} from "antd";
 import ReactDOM from "react-dom";
 
-import NavBar from "./NavBar.jsx";
-import Footer from "./Footer";
+import NavBar from "../navbar/NavBar.jsx";
+import Footer from "../footer/Footer";
 
 class ResetForm extends React.Component {
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log("Received values of form: ", values);
-      }
-    });
-  };
+    handleSubmit = e => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log("Received values of form: ", values);
+            }
+        });
+    };
 
   render() {
     const { getFieldDecorator } = this.props.form;
