@@ -1,11 +1,11 @@
 import time
-start_time = time.time()
-
+from elasticsearch import helpers
 import logging
 import json
 
 from elasticsearch import Elasticsearch
 logging.basicConfig(level=logging.ERROR)
+start_time = time.time()
 
 
 def connect_elasticsearch(url = 'localhost', port = 9200):
@@ -58,3 +58,18 @@ def yield_record(file_path, encoding="utf8"):
            
 
     print("Inserted total " + str(line_counter) + " lines")
+
+
+
+def es_add_bulk(file_path):
+    papers = ({
+        "_index": "research_portal",
+        "_type": "research_papers",
+        "_id": paper_id,
+        "_source": paper_record,
+    } for paper_id, paper_record in yield_record(file_path))
+
+    helpers.bulk(es, papers)
+
+
+delete_index("research_portal")
