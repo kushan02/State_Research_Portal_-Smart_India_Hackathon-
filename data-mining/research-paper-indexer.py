@@ -73,3 +73,80 @@ def es_add_bulk(file_path):
 
 
 delete_index("research_portal")
+
+
+mappings = {
+    "settings":{
+        "index": {
+            "number_of_shards": 3,
+            "number_of_replicas":1,
+            "codec": "best_compression"
+        }
+    },
+     "mappings": {
+         "research_papers":{
+             "properties": {
+                 "title": {
+                    "type": "text"
+                  },
+#                  "authors":{
+#                      "type": "keyword"
+#                  },
+                  "citationCount": {
+                    "type": "integer",
+                    "index": False
+                  },
+                 "referenceCount": {
+                    "type": "integer",
+                    "index": False
+                  },
+                  "year": {
+                    "type": "integer",
+                  },
+#                   "journalName": {
+#                     "type": "keyword"
+#                   },
+                  "doi": {
+                    "type": "keyword",
+                  },
+                  "doiUrl": {
+                    "type": "keyword",
+                    "index": False
+                  },
+                  "journalPages": {
+                    "type": "keyword",
+                    "index": False
+                  },
+                  "journalVolume": {
+                    "type": "keyword",
+                    "index": False
+                  },
+                  "paperAbstract": {
+                    "type": "text",
+                    "index": False
+                  },
+                  "pdfUrls": {
+                    "type": "keyword",
+                    "index": False
+                  },
+                  "s2PdfUrl": {
+                    "type": "keyword",
+                    "index": False
+                  },
+                  "venue": {
+                    "type": "keyword",
+                    "index": False
+                  },
+#                  "fieldsOfStudy":{
+#                      "type": "keyword"
+#                  },
+#                  "relatedTopics":{
+#                      "type": "keyword"
+#                  }
+            }
+        }
+     }
+}
+es.indices.create(index='research_portal', ignore=400, body=mappings)
+# curl -XGET localhost:9200/_cat/indices?v
+# ^ Get size of each index
