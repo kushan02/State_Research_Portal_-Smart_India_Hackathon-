@@ -23,8 +23,21 @@ import {
 } from 'antd';
 
 const { Option } = Select;
-const { TextArea } = Input;
 const AutoCompleteOption = AutoComplete.Option;
+const residences = [
+  {
+    value: 'ahmedabad',
+    label: 'Ahmedabad',
+  },
+  {
+    value: 'vijaywada',
+    label: 'Vijaywada',
+  },
+  {
+    value: 'visakhapatnam',
+    label: 'Visakhapatnam',
+  },
+];
 
 class RegistrationForm extends React.Component {
   state = {
@@ -49,7 +62,7 @@ class RegistrationForm extends React.Component {
   compareToFirstPassword = (rule, value, callback) => {
     const { form } = this.props;
     if (value && value !== form.getFieldValue('password')) {
-      callback('Passwords donot match, try again!');
+      callback('Two passwords that you enter is inconsistent!');
     } else {
       callback();
     }
@@ -63,6 +76,15 @@ class RegistrationForm extends React.Component {
     callback();
   };
 
+  handleHomepageChange = value => {
+    let autoCompleteResult;
+    if (!value) {
+      autoCompleteResult = [];
+    } else {
+      autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
+    }
+    this.setState({ autoCompleteResult });
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -97,10 +119,10 @@ class RegistrationForm extends React.Component {
         <Option value="91">+91</Option>
       </Select>,
     );
-    const onChange = e => {
-      console.log(e);
-    };
 
+    const homepageOptions = autoCompleteResult.map(homepage => (
+      <AutoCompleteOption key={homepage}>{homepage}</AutoCompleteOption>
+    ));
 
     return (
       <React.Fragment>
@@ -115,15 +137,15 @@ class RegistrationForm extends React.Component {
           label={
             <span>
               Name&nbsp;
-              <Tooltip title="Full Name as it appears on your research papers">
+              <Tooltip title="Full Name as it appears on your articles">
                 <Icon type="question-circle-o" />
                   </Tooltip>
              </span>
           }
           >
           {getFieldDecorator('name', {
-            rules: [{ required: true, message: 'Please input your Full Name.', whitespace: true }],
-          })(<Input placeholder="Enter your full name"/>)}
+            rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
+          })(<Input />)}
         </Form.Item>
         <Form.Item label="E-mail">
           {getFieldDecorator('email', {
@@ -134,10 +156,10 @@ class RegistrationForm extends React.Component {
               },
               {
                 required: true,
-                message: 'Please input your E-mail Address',
+                message: 'Please input your E-mail!',
               },
             ],
-          })(<Input placeholder="Enter your Email Address" />)}
+          })(<Input />)}
         </Form.Item>
         <Form.Item label="Password" hasFeedback>
           {getFieldDecorator('password', {
@@ -150,7 +172,7 @@ class RegistrationForm extends React.Component {
                 validator: this.validateToNextPassword,
               },
             ],
-          })(<Input.Password placeholder="Enter your password"/>)}
+          })(<Input.Password />)}
         </Form.Item>
         <Form.Item label="Confirm Password" hasFeedback>
           {getFieldDecorator('confirm', {
@@ -163,90 +185,79 @@ class RegistrationForm extends React.Component {
                 validator: this.compareToFirstPassword,
               },
             ],
-          })(<Input.Password onBlur={this.handleConfirmBlur} placeholder="Confirm your Password"/>)}
+          })(<Input.Password onBlur={this.handleConfirmBlur} />)}
         </Form.Item>
         <Form.Item
           label={
             <span>
-              Institute&nbsp;
-              <Tooltip title="E.g., DEPSTAR, Charusat University">
+              Affiliation&nbsp;
+              <Tooltip title="E.g., Professor of Physics, Charusat University">
                 <Icon type="question-circle-o" />
               </Tooltip>
             </span>
           }
         >
-          {getFieldDecorator('institute', {
-            rules: [{ required: true, message: 'Please input your Institute name', whitespace: true }],
-          })(<Input placeholder='Provide your Institute Name' />)}
-          </Form.Item>
-
-          {/*Area of Interest*/}
-          {/* Remove Area of interest for now */}
-          {/* <Form.Item 
-            label={
-              <span>
-                Area of Interest&nbsp;
-                <Tooltip title="E.g., Machine Learning, Aerospace, Data Analytics">
-                  <Icon type="question-circle-o" />
-                </Tooltip>
-              </span>
-            }
-          >
-          {getFieldDecorator('areaOfInterest', {
-                rules: [{ required: true, message: 'Please enter your area of Interest' }],
-          })
-          (<Select mode="tags" style={{ width: '100%' }} placeholder="Enter your area of Interests" required>
-          </Select>)}
-          </Form.Item> */}
-
-          <Form.Item label="City">
-            {getFieldDecorator('city', {
-              rules: [{ required: true, message: 'Please input the city', whitespace: true }],
-            })(<Input placeholder="Enter your city"/>)}
-          </Form.Item>
-
-          
-          <Form.Item label="Homepage">
-            {getFieldDecorator('homepage', {
-                rules: [{ required: false, message: 'Please enter your Website' }],
-            })(<Input placeholder="Enter your Website"/>)}
-          </Form.Item>
-
-          <Form.Item size="large" label="Bio">
-                        <TextArea placeholder="Write a short bio about yourself" allowClear onChange={onChange} />
-          </Form.Item>
-          
-          <Form.Item label="Phone Number">
-              {getFieldDecorator('phone', {
-                  rules: [{ required: false, message: 'Please input your phone number!' }],
-              })(<Input placeholder='' addonBefore={prefixSelector} style={{ width: '100%' }} />)}
-          </Form.Item>
-          {/* <Form.Item label="Captcha" extra="We must make sure that your are a human.">
-            <Row gutter={8}>
-              <Col span={12}>
-                {getFieldDecorator('captcha', {
-                  rules: [{ required: true, message: 'Please input the captcha you got!' }],
-                })(<Input />)}
-              </Col>
-              <Col span={12}>
-                <Button>Get captcha</Button>
-              </Col>
-            </Row>
-          </Form.Item> */}
-          <Form.Item {...tailFormItemLayout}>
-            {getFieldDecorator('agreement', {
-              valuePropName: 'checked',
-            })(
-              <Checkbox>
-                I agree with <a href="#">Terms & Conditions</a>
-              </Checkbox>,
-            )}
-          </Form.Item>
-          <Form.Item {...tailFormItemLayout} className="registration-register-button">
-            <Button type="primary" htmlType="submit">
-              Register
-            </Button>
-          </Form.Item>
+          {getFieldDecorator('affiliation', {
+            rules: [{ required: true, message: 'Please input your Affiliation', whitespace: true }],
+          })(<Input placeholder='' />)}
+            </Form.Item>
+        <Form.Item label="Area Of Interest">
+             {getFieldDecorator('areaOfInterest', {
+                    rules: [{ required: false, message: 'Please enter your Area of Interest!' }],
+             })(<Input placeholder='Like General Relativity, Unified field theory' />)}
+        </Form.Item>
+        <Form.Item label="Homepage">
+           {getFieldDecorator('homepage', {
+              rules: [{ required: false, message: 'Please enter your website!' }],
+           })(
+              <AutoComplete
+                 dataSource={homepageOptions}
+                 onChange={this.handleHomepageChange}
+                 placeholder="E.g. http://www.charusatuniversity/~einstein"
+              >
+              <Input />
+              </AutoComplete>,
+             )}
+        </Form.Item>
+        <Form.Item label="Location">
+                {getFieldDecorator('residence', {
+                    initialValue: ['Visakhapatnam', 'Vijayawada', 'Amaravati'],
+            rules: [
+              { type: 'array', required: false, message: 'Please select your residence!' },
+            ],
+          })(<Cascader placeholder='Like Ahmedabad, Vijayawada, Visakhapatnam' options={residences} />)}
+        </Form.Item>
+        <Form.Item label="Phone Number">
+            {getFieldDecorator('phone', {
+                 rules: [{ required: false, message: 'Please input your phone number!' }],
+            })(<Input placeholder='' addonBefore={prefixSelector} style={{ width: '100%' }} />)}
+        </Form.Item>
+        <Form.Item label="Captcha" extra="We must make sure that your are a human.">
+          <Row gutter={8}>
+            <Col span={12}>
+              {getFieldDecorator('captcha', {
+                rules: [{ required: true, message: 'Please input the captcha you got!' }],
+              })(<Input />)}
+            </Col>
+            <Col span={12}>
+              <Button>Get captcha</Button>
+            </Col>
+          </Row>
+        </Form.Item>
+        <Form.Item {...tailFormItemLayout}>
+          {getFieldDecorator('agreement', {
+            valuePropName: 'checked',
+          })(
+            <Checkbox>
+              I have read the <a href="">agreement</a>
+            </Checkbox>,
+          )}
+        </Form.Item>
+        <Form.Item {...tailFormItemLayout} className="registration-register-button">
+          <Button type="primary" htmlType="submit">
+            Register
+          </Button>
+        </Form.Item>
       </Form>
       {/* <div className="home-footer"> */}
         {/* </div> */}
