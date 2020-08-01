@@ -21,7 +21,9 @@ class SearchResult extends Component {
     console.log(queryString.parse(this.props.location.search));
     return (
       <div>
-        <NavBar />
+          <div className="navbar-outer-div">
+          <NavBar />
+        </div>
         <ReactiveBase
           app="MovieAppFinal"
           credentials="RxIAbH9Jc:6d3a5016-5e9d-448f-bd2b-63c80b401484"
