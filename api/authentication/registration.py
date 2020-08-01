@@ -39,11 +39,33 @@ def data_reg():
         else:
             bool_valid_pass = False
 
+        # phone number validation
+        p_no = data['phone_number']
+        regex_p_no = re.compile('[6-9][0-9]{9}')
+        bool_valid_phone = bool(re.match(regex_p_no, p_no))
+
+        # homepage url validation
+        hp_url = data['hp']
+        regex_hp = re.compile(
+            r'^(?:http|ftp)s?://'  # http:// or https://
+            r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
+            r'localhost|'  # localhost...
+            r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
+            r'(?::\d+)?'  # optional port
+            r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
+        bool_valid_hp = bool(re.match(regex_hp, hp_url))
+
+        regex_email = re.compile('^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$')
+        bool_valid_email = bool(re.match(regex_email, e_mail))
+
+
         print(bool_valid_email)
         print(bool_valid_pass)
 
 
-        if bool_valid_email == True and bool_valid_pass == True and bool_no_null_input == True:
+        # if bool_valid_email == True and bool_valid_pass == True and bool_no_null_input == True:
+            if bool_valid_email == True and bool_valid_pass == True and bool_no_null_input == True and bool_valid_phone == True and bool_valid_hp == True:
             sql = "INSERT INTO users(NAME, EMAIL, PASSWORD, INSTITUTE, CITY, HOMEPAGE, BIO, PHONE_NUMBER) VALUES" + "(" + "'" + (
                 str(data['fname'])) + "'" + "," + "'" + (str(data['email'])) + "'" + "," + "'" + (
                       str(pass_hash)) + "'" + "," + "'" + (
