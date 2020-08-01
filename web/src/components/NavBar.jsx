@@ -17,12 +17,18 @@ class NavBar extends Component {
       document.getElementById("second-nav-id").style.height = "0px";
     }
   };
+
   componentDidMount = () => {
-    console.log(JSON.parse(localStorage.getItem("login-data")));
-    if (JSON.parse(localStorage.getItem("login-data"))) {
-      this.setState({ isLogin: true });
-    }
-  };
+        if (localStorage.getItem("login-data")) {
+            this.setState({
+                isLogin: true,
+                user_name: localStorage.getItem("user_name"),
+                user_email: localStorage.getItem("user_email")
+            });
+        }
+    };
+
+
   handleLogout = () => {
     localStorage.clear();
     this.setState({ isLogin: false });

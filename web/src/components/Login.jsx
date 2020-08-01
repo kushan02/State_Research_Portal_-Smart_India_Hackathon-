@@ -63,15 +63,21 @@ class NormalLoginForm extends React.Component {
                 }).then((res) => {
                     console.log(res.status);
                     console.log(res.config.data);
-                    if (res.status === 200) {
+                   if (res.status === 200) {
                         this.setState({ loading: false });
+                        console.log(res);
+                        this.setState({loading: false});
                         message.success("Login successful. Redirecting you to homepage...");
                         localStorage.setItem('login-data', JSON.stringify(res.config.data));
 
+                        // localStorage.setItem('login-data', JSON.stringify(res.config.data));
+                        localStorage.setItem("login-data", true);
+                        localStorage.setItem("user_email", values.email);
+                        localStorage.setItem("user_name", res.data);
                         setTimeout(() => {
                             this.props.history.push("/");
                         }, 3000);
-
+                        }, 1000);
 
                     } else {
                         this.setState({ incorrectPasswordMessage: true })
@@ -86,8 +92,8 @@ class NormalLoginForm extends React.Component {
                             console.log(error.response.headers);
 
                             if (error.response.status === 401) {
-                                this.setState({ incorrectPasswordMessage: true });
-                                this.setState({ loading: false });
+                                this.setState({incorrectPasswordMessage: true});
+                                this.setState({loading: false});
                                 message.error("Incorrect credentials entered. Please try again.", 5);
                                 this.props.form.resetFields()
                             } else {
@@ -103,17 +109,31 @@ class NormalLoginForm extends React.Component {
         });
     };
 
-    responseGoogle = (response) => {
+      responseGoogle = (response) => {
         console.log(response);
         if ("profileObj" in response) {
             message.success("Login via Google successful", 3);
             let user_name = response["profileObj"]["name"];
+            var name_split = user_name.toLowerCase().split(" ");
+            user_name = "";
+            for (var i = 0; i < name_split.length; ++i) {
+                user_name += name_split[i][0].toUpperCase() + name_split[i].slice(1)
+                if (i !== name_split.length - 1) {
+                    user_name += " ";
+                }
+            }
+
             let user_email = response["profileObj"]["email"];
             let data = { "user_name": user_name, "user_email": user_email, "profile_completed": false };
+            let data = {"user_name": user_name, "user_email": user_email, "profile_completed": false};
             localStorage.setItem('google-oauth-data', JSON.stringify(data));
+            localStorage.setItem("login-data", true);
+            localStorage.setItem("user_email", user_email);
+            localStorage.setItem("user_name", user_name);
 
             setTimeout(() => {
                 this.props.history.push("/registration");
+                message.success("Login via Google successful", 3);
                 message.info("Please complete your profile to access all the features of the site", 7);
             }, 3000);
         }
