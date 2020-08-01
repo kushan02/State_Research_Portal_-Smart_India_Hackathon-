@@ -4,44 +4,8 @@ import { Menu, Dropdown, Icon } from "antd";
 import "./NavBar.css";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-const menu = (
-  // <Router>
-  <Menu>
-    <Menu.Item key="0">
-      <Link to="/upload-paper">
-        <a>Upload Paper</a>
-      </Link>
-    </Menu.Item>
-    <Menu.Item key="1">
-      <Link to="/papers">
-        <a>View Papers</a>
-      </Link>
-    </Menu.Item>
-    {/* <Menu.Item key="1">
-      <Link to="/login">
-        <a href="http://www.taobao.com/">My Profile</a>
-      </Link>
-    </Menu.Item> */}
-    <Menu.Item key="2">
-      <Link to="/profile/info">
-        <a>Settings</a>
-      </Link>
-    </Menu.Item>
-    <Menu.Divider />
-    <Menu.Item key="3">
-      <Link to="/">
-        <a>Log Out</a>
-      </Link>
-    </Menu.Item>
-    {/* <Link to="/login">
-      <Menu.Item key="3">3rd menu item</Menu.Item>
-    </Link> */}
-  </Menu>
-  // </Router>
-);
-
 class NavBar extends Component {
-  state = {};
+  state = { isLogin: false };
   handleMenuClick = () => {
     // console.log(document.getElementById("second-nav-id").offsetHeight);
     // console.log(document.getElementById("second-nav-id").childNodes.length * 45.8);
@@ -53,6 +17,17 @@ class NavBar extends Component {
       document.getElementById("second-nav-id").style.height = "0px";
     }
   };
+  componentDidMount = () => {
+    console.log(JSON.parse(localStorage.getItem("login-data")));
+    if (JSON.parse(localStorage.getItem("login-data"))) {
+      this.setState({ isLogin: true });
+    }
+  };
+  handleLogout = () => {
+    localStorage.clear();
+    this.setState({ isLogin: false });
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -91,24 +66,60 @@ class NavBar extends Component {
           </Link>
           <div style={{ flex: 1 }}></div>
           <div className="navbar-right-content">
-          <Dropdown
-          overlay={menu}
-          trigger={["click"]}
-          className="navbar-right-element"
-        >
-          <a className="ant-dropdown-link" href="#">
-            Fenil Kaneria <Icon type="down" />
-          </a>
-        </Dropdown>
-            <Link to="/registration">
-              <span className="nav-sign-up navbar-right-element">
-                <span>Create Account</span>
-              </span>
-            </Link>
+            {this.state.isLogin ? (
+              <Dropdown
+                overlay={
+                  <Menu>
+                    <Menu.Item key="0">
+                      <Link to="/upload-paper">
+                        <a>Upload Paper</a>
+                      </Link>
+                    </Menu.Item>
+                    <Menu.Item key="1">
+                      <Link to="/papers">
+                        <a>View Papers</a>
+                      </Link>
+                    </Menu.Item>
+                    {/* <Menu.Item key="1">
+                    <Link to="/login">
+                      <a href="http://www.taobao.com/">My Profile</a>
+                    </Link>
+                  </Menu.Item> */}
+                    <Menu.Item key="2">
+                      <Link to="/profile/info">
+                        <a>Settings</a>
+                      </Link>
+                    </Menu.Item>
+                    <Menu.Divider />
+                    <Menu.Item key="3">
+                      <Link onClick={this.handleLogout}>
+                        <a>Log Out</a>
+                      </Link>
+                    </Menu.Item>
+                  </Menu>
+                }
+                trigger={["click"]}
+                className="navbar-right-element"
+              >
+                <a className="ant-dropdown-link" href="#">
+                  Fenil Kaneria <Icon type="down" />
+                </a>
+              </Dropdown>
+            ) : (
+              <React.Fragment>
+                <Link to="/registration">
+                  <span className="nav-sign-up navbar-right-element">
+                    <span>Create Account</span>
+                  </span>
+                </Link>
 
-            <Link to="/login">
-              <span className="nav-sign-in navbar-right-element">Sign In</span>
-            </Link>
+                <Link to="/login">
+                  <span className="nav-sign-in navbar-right-element">
+                    Sign In
+                  </span>
+                </Link>
+              </React.Fragment>
+            )}
           </div>
           <Icon
             type="menu"
@@ -118,8 +129,6 @@ class NavBar extends Component {
           />
         </nav>
         <nav className="second-nav" id="second-nav-id">
-          {/* <div>Sign In</div>
-          <div>Sign Up</div> */}
           <div>Fenil Kaneria</div>
           <Link to="/upload-paper">
             <div>Upload Papers</div>
@@ -131,7 +140,6 @@ class NavBar extends Component {
             <div>Settings</div>
           </Link>
           <div>Logout</div>
-          {/* <div className="second-nav-background" onClick={this.handleMenuClick}></div> */}
         </nav>
       </React.Fragment>
     );
