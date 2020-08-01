@@ -6,10 +6,11 @@
     padding: 20px;
     width: 100%;
     z-index: -1;    
+    background-color: rgb(223, 223, 223);
     /* background-color: red; */
-    background-image: url(../assets/background.jpg);
-    background-repeat: no-repeat;
-    background-size: cover ;
+    /* background-image: url(../assets/background.jpg); */
+    /* background-repeat: no-repeat; */
+    /* background-size: cover ; */
 
 }
 .center-container{

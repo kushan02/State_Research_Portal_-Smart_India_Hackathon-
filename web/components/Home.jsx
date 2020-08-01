@@ -59,13 +59,18 @@ class Home extends Component {
               Find research from the world's most trusted sources
             </h2>
             <div className="search-bar">
-              <ReactiveBase
+              {/* <ReactiveBase
                 app="research-portal"
                 credentials="GqA01As7V:c544b036-d3a0-4725-acd5-4d1b31b7b5cc"
                 url="https://scalr.api.appbase.io"
                 analytics={true}
                 searchStateHeader
-              >
+              > */}
+              <ReactiveBase
+            url="http://localhost:9200"
+            app="research_portal"
+            searchStateHeader
+          >
                 <DataSearch
                   onValueChange={this.onSearchValueChange}
                   onKeyDown={this.handleKey}
