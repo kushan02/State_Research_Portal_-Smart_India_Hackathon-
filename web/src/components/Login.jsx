@@ -13,12 +13,12 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import constants from "../../constants";
 
 
-
 class NormalLoginForm extends React.Component {
     state = {
         loadingConformPassword: false,
         visibleConformPasswordPopup: false,
-        incorrectPasswordMessage: false
+        incorrectPasswordMessage: false,
+        loading: false
     };
 
     showConformPasswordModal = () => {
@@ -52,42 +52,48 @@ class NormalLoginForm extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.setState({ incorrectPasswordMessage: false })
+        this.setState({ incorrectPasswordMessage: false });
 
         this.props.form.validateFields(['email', 'password'], (err, values) => {
             if (!err) {
-                axios
-                    // .get('https://httpstat.us/401', {
-                    .post(constants.flaskServerUrl + 'login/', {
-                        user_email: values.email,
-                        password: values.password,
-                    })
-                    .then((res) => {
-                        console.log(res.status);
-                        console.log(res.config.data);
-                        if (res.status == 200) {
-                            localStorage.setItem('login-data', JSON.stringify(res.config.data));
+                this.setState({ loading: true });
+                axios.post(constants.flaskServerUrl + 'login/', {
+                    user_email: values.email,
+                    password: values.password,
+                }).then((res) => {
+                    console.log(res.status);
+                    console.log(res.config.data);
+                    if (res.status === 200) {
+                        this.setState({ loading: false });
+                        message.success("Login successful. Redirecting you to homepage...");
+                        localStorage.setItem('login-data', JSON.stringify(res.config.data));
+
+                        setTimeout(() => {
                             this.props.history.push("/");
-                        }
-                        else {
-                            this.setState({ incorrectPasswordMessage: true })
+                        }, 3000);
 
-                        }
 
-                        // console.log(res.data);
-                    })
+                    } else {
+                        this.setState({ incorrectPasswordMessage: true })
+                        this.setState({ loading: false });
+                        this.props.form.resetFields()
+                    }
+                })
                     .catch((error) => {
                         if (error.response) {
                             console.log(error.response.data);
                             console.log(error.response.status);
                             console.log(error.response.headers);
 
-                            if (error.response.status == 401) {
-                                this.setState({ incorrectPasswordMessage: true })
-                            }
-                            else {
+                            if (error.response.status === 401) {
+                                this.setState({ incorrectPasswordMessage: true });
+                                this.setState({ loading: false });
+                                message.error("Incorrect credentials entered. Please try again.", 5);
+                                this.props.form.resetFields()
+                            } else {
+                                this.props.form.resetFields()
                                 message.error("Error! try again");
-
+                                this.setState({ loading: false });
                             }
                         }
                     });
@@ -97,11 +103,25 @@ class NormalLoginForm extends React.Component {
         });
     };
 
+    responseGoogle = (response) => {
+        console.log(response);
+        if ("profileObj" in response) {
+            message.success("Login via Google successful", 3);
+            let user_name = response["profileObj"]["name"];
+            let user_email = response["profileObj"]["email"];
+            let data = { "user_name": user_name, "user_email": user_email, "profile_completed": false };
+            localStorage.setItem('google-oauth-data', JSON.stringify(data));
+
+            setTimeout(() => {
+                this.props.history.push("/registration");
+                message.info("Please complete your profile to access all the features of the site", 7);
+            }, 3000);
+        }
+    };
+
     render() {
         const { getFieldDecorator } = this.props.form;
-        const responseGoogle = (response) => {
-            console.log(response);
-        };
+
 
         return (
             <React.Fragment>
@@ -142,10 +162,10 @@ class NormalLoginForm extends React.Component {
 
                     <div style={{ width: "100%" }}>
                         <GoogleLogin
-                            clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+                            clientId={constants.google_oauth_client_id}
                             buttonText="Login With Google"
-                            onSuccess={responseGoogle}
-                            onFailure={responseGoogle}
+                            onSuccess={this.responseGoogle}
+                            onFailure={this.responseGoogle}
                             cookiePolicy={"single_host_origin"}
                             style={{ width: "100%" }}
                         />
@@ -189,9 +209,9 @@ class NormalLoginForm extends React.Component {
 
                         <br />
 
-                        {this.state.incorrectPasswordMessage && <Tag color="red">Incorrect user id or password !</Tag>}
+                        {/*{this.state.incorrectPasswordMessage && <Tag color="red">Incorrect user id or password !</Tag>}*/}
 
-                        <Button type="primary" htmlType="submit" className="login-form-button"
+                        <Button type="primary" htmlType="submit" className="login-form-button" loading={this.state.loading}
                             style={{ width: "100%", marginTop: "20px" }}>
                             Log in
                         </Button>
