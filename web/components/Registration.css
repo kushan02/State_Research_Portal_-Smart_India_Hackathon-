@@ -1,0 +1,28 @@
+.registration-container{
+width:55%;
+margin: 40px auto 40px;
+box-shadow: 0 1px 6px 0 rgba(32,33,36,0.28);
+border-radius: 10px;
+padding: 50px;
+padding-top: 30px;
+/* text-align: center !important; */
+/* border:1px solid red; */
+/* text-align: center; */
+}
+.registration-container .ant-form-item-label{
+
+text-align: left;
+}
+.registration-title{
+    margin-bottom: 20px;
+    text-align: center;
+}
+.registration-register-button{
+    margin-left: 10%;
+}
+@media screen and (min-width: 720px){
+    .registration-container{
+        /* margin-left: 22vh; */
+        /* padding-left: -20px; */
+        }
+}
