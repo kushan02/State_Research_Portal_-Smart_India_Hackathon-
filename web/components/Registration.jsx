@@ -49,7 +49,7 @@ class RegistrationForm extends React.Component {
   compareToFirstPassword = (rule, value, callback) => {
     const { form } = this.props;
     if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!');
+      callback('Passwords donot match, try again!');
     } else {
       callback();
     }
@@ -63,15 +63,6 @@ class RegistrationForm extends React.Component {
     callback();
   };
 
-  handleHomepageChange = value => {
-    let autoCompleteResult;
-    if (!value) {
-      autoCompleteResult = [];
-    } else {
-      autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
-    }
-    this.setState({ autoCompleteResult });
-  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -110,9 +101,6 @@ class RegistrationForm extends React.Component {
       console.log(e);
     };
 
-    const homepageOptions = autoCompleteResult.map(homepage => (
-      <AutoCompleteOption key={homepage}>{homepage}</AutoCompleteOption>
-    ));
 
     return (
       <React.Fragment>
@@ -193,7 +181,8 @@ class RegistrationForm extends React.Component {
           </Form.Item>
 
           {/*Area of Interest*/}
-          <Form.Item 
+          {/* Remove Area of interest for now */}
+          {/* <Form.Item 
             label={
               <span>
                 Area of Interest&nbsp;
@@ -208,7 +197,7 @@ class RegistrationForm extends React.Component {
           })
           (<Select mode="tags" style={{ width: '100%' }} placeholder="Enter your area of Interests" required>
           </Select>)}
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item label="City">
             {getFieldDecorator('city', {
@@ -219,20 +208,12 @@ class RegistrationForm extends React.Component {
           
           <Form.Item label="Homepage">
             {getFieldDecorator('homepage', {
-                rules: [{ required: false, message: 'Please enter your website' }],
-            })(
-                <AutoComplete
-                  dataSource={homepageOptions}
-                  onChange={this.handleHomepageChange}
-                  placeholder="E.g. http://www.charusatuniversity/~research_portal"
-                >
-                <Input />
-                </AutoComplete>,
-              )}
+                rules: [{ required: false, message: 'Please enter your Website' }],
+            })(<Input placeholder="Enter your Website"/>)}
           </Form.Item>
 
           <Form.Item size="large" label="Bio">
-                        <TextArea placeholder="Write about yourself" allowClear onChange={onChange} />
+                        <TextArea placeholder="Write a short bio about yourself" allowClear onChange={onChange} />
           </Form.Item>
           
           <Form.Item label="Phone Number">
@@ -257,7 +238,7 @@ class RegistrationForm extends React.Component {
               valuePropName: 'checked',
             })(
               <Checkbox>
-                I agree with <a href="">Terms & Conditions</a>
+                I agree with <a href="#">Terms & Conditions</a>
               </Checkbox>,
             )}
           </Form.Item>
