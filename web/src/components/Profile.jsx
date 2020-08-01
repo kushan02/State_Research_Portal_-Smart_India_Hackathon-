@@ -17,97 +17,90 @@ class Sider extends React.Component {
     console.log("click ", e);
   };
 
-  render() {
+ render() {
     return (
       <React.Fragment>
-       <div className="navbar-outer-div">
+        <div className="navbar-outer-div">
           <NavBar />
-        </div>
-        <div className="profile-outer-div">
-        <div className="profile-left">
-          <Menu
-            onClick={this.handleClick}
-            className="vertical-menu"
-            style={{ width: "100%" }}
-            defaultSelectedKeys={["1"]}
-            defaultOpenKeys={["1"]}
-            mode="inline"
-          >
-            <Menu.Item key="1">
-              <Link to="/profile/info">
-                <Icon type="appstore" />
-                <span>Profile</span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <Link to="/profile/account">
-                <Icon type="desktop" />
-                <span>Account</span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="3">
-              <Link to="/profile/security">
-                <Icon type="setting" />
-                <span>Security</span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="5">
-              <Link to="/profile/security-log">
-                <Icon type="calendar" />
-                <span>Security Log</span>
-              </Link>
-            </Menu.Item>
-          </Menu>
-          <Menu
-            onClick={this.handleClick}
-            style={{ width: "100%" }}
-            className="horizontal-menu"
-            defaultSelectedKeys={["1"]}
-            defaultOpenKeys={["1"]}
-            mode="horizontal"
-          >
-            <Menu.Item key="1">
-              <Link to="/profile/info">
-                <Icon type="appstore" />
-                {/* <span>Profile</span> */}
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <Link to="/profile/account">
-                <Icon type="desktop" />
-                {/* <span>Account</span> */}
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="3">
-              <Link to="/profile/security">
-                <Icon type="setting" />
-                {/* <span>Security</span> */}
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="5">
-              <Link to="/profile/security-log">
-                <Icon type="calendar" />
-                {/* <span>Security Log</span> */}
-              </Link>
-            </Menu.Item>
-          </Menu>
-        </div>
-        
-        <div className="profile-right">
-          <ProfileComponents />
-        </div>
-        <div style={{clear:"both"}}></div>
+          <br/>
 
-        
+        </div>
 
 
-        {/* <div className="home-footer"> */}
+
+
+        <div style={{paddingTop:"90px", width:'80%'}}>
+            <div style={{
+                marginLeft:'98%',
+                width:'25%',
+                height:'57px'
+            }}>
+                <div style={{
+                    width: '25%',
+                }}>
+                    <Card title="Author Details" style={{width: 260, height: '70vh', borderRadius: '5px'}}>
+                        <p>Charotar University of Science and Technology </p>
+                        Department of Computer Science and Engineering, Gujarat, India
+                        <br/><br/>
+                        <p><h4>Current position</h4></p>
+                        Student, Devang Patel Institute of Advance Technology , CSE
+                    </Card>
+                </div>
+            </div>
+
+            <div className="profile-main-outer-div" style={{
+                marginTop: '-57px'
+            }}>
+                <div className="papers-inner-div">
+                    <h1>Kushan Mehta<Button size="large" id="contact-button">Contact</Button></h1>
+                    Charotar University of Science and Technology | CHARUSAT
+                    <br/>
+                    BTech - Computer Science & Engineering
+                    <br/><br/>
+                    <h3>Skills</h3>
+                    <Tag style={{padding: '3px', borderRadius: '7px'}}>Data Analytics</Tag>
+                    <Tag style={{padding: '3px', borderRadius: '7px'}}>Machine Learning</Tag>
+                    <Tag style={{padding: '3px', borderRadius: '7px'}}>Data Mining</Tag>
+
+
+                </div>
+
+            </div>
+
+
+            <div className="profile-main-outer-div">
+              <div className="papers-inner-div">
+                  <Row className="summary-row" justify="space-between">
+                      <Col span={8}><h3>1</h3></Col>
+                      <Col span={8}><h3>1,276</h3></Col>
+                      <Col span={8}><h3>7</h3></Col>
+                  </Row>
+                  <Row className="summary-row" justify="space-between">
+
+                      <Col span={8}>Publications</Col>
+                      <Col span={8}>Reads</Col>
+                      <Col span={8}>Citations</Col>
+                  </Row>
+              </div>
+          </div>
+        <div className="papers-outer-div">
+
+        <div className="papers-inner-div">
+
+
+          <h1>Papers</h1>
+          	     <Table columns={columns} dataSource={data1} onChange={onChange} />
         </div>
-        <div style={{clear:"both"}}></div>
-        {/* <Footer /> */}
-        {/* </div> */}
+        </div>
+
+        </div>
+
+
+
+          <Footer/>
       </React.Fragment>
     );
   }
 }
+
 export default Sider;
