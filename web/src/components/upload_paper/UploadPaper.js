@@ -78,7 +78,10 @@ class UploadPaper extends React.Component {
     paperExistYes = () => {
 
         // TODO: Somehow get the values of all authors which showed up in the paper result in previous step
-        var author_names = ["Amit Ganatra", "Parth Shah", "Kushan Mehta"];
+        // var author_names = ["Amit Ganatra", "Parth Shah", "Kushan Mehta"];
+        var author_names = this.state.paperExistDetails.authors.map(author=>author.name);
+        console.log(author_names)
+        console.log(this.state.paperExistDetails.authors.map(author=>author.name))
 
         var paper_authentic = false;
 

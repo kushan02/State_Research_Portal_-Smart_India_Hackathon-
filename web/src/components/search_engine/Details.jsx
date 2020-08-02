@@ -1,22 +1,28 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import "./Details.css";
 // import queryString from "query-string";
 
 import NavBar from "../navbar/NavBar.jsx";
 import Footer from "../footer/Footer.jsx";
 
-import {Skeleton, Icon} from "antd";
+import { Skeleton, Icon } from "antd";
 import constants from "../../constants";
 
 import axios from "axios";
 
 export class Details extends Component {
-    state = {
-        data: {},
-        loading: true,
+  state = {
+    data: {},
+    loading: true,
+    referencesLoading: true,
+    references: [],
+    paperApiData: {},
   };
 
   componentDidMount() {
+    this.setState({ loading: true });
+    this.setState({ referencesLoading: true });
+
     axios
       .get(
         constants.flaskServerUrl +
@@ -27,6 +33,60 @@ export class Details extends Component {
         console.log(res.data.hits.hits[0]._source);
         this.setState({ data: res.data.hits.hits[0]._source });
         this.setState({ loading: false });
+        // let referencesId = [
+        //   "ac802376ee604d32ea6432f2781ef8b26ffaed13",
+        //   "ac802376ee604d32ea6432f2781ef8b26ffaed13",
+        //   "ac802376ee604d32ea6432f2781ef8b26ffaed13",
+        //   "ac802376ee604d32ea6432f2781ef8b26ffaed13",
+        // ];
+        let referencesId = res.data.hits.hits[0]._source.outCitations;
+        referencesId = referencesId.slice(0, 21);
+        let referencesRequestArray = [];
+        for (let i of referencesId) {
+          // console.log(i);
+          referencesRequestArray.push(
+            axios.get(constants.flaskServerUrl + "paper_details?id=" + i)
+          );
+        }
+        axios
+          .all(referencesRequestArray)
+          .then(
+            axios.spread((...res1) => {
+              this.setState({ referencesLoading: false });
+
+              console.log(res1);
+              let newreferences = [];
+              for (let i in res1) {
+                let data = res1[i];
+                if (data.data.hits.hits.length == 0) {
+                  continue;
+                }
+                newreferences.push({
+                  ...data.data.hits.hits[0]._source,
+                  id: referencesId[i],
+                });
+              }
+              // console.log(newreferences);
+
+              this.setState({ references: newreferences });
+            })
+          )
+          .catch((err) => {
+            this.setState({ referencesLoading: false });
+
+            console.error(err);
+          });
+        // --------------------------------------------------
+        axios
+          .get(
+            "https://api.semanticscholar.org/v1/paper/" +
+              this.props.match.params.id
+          )
+          .then((res) => {
+            console.log(res);
+            this.setState({ paperApiData: res.data });
+          })
+          .catch((err) => console.error(err));
       })
       .catch((err) => console.error(err));
   }
@@ -88,6 +148,30 @@ export class Details extends Component {
                   <p className="details-abstract">
                     {this.state.data.paperAbstract}
                   </p>
+                  {this.state.data.fieldsOfStudy.length != 0 && (
+                    <>
+                      <h2>Fields Of Study</h2>
+                      <div style={{ marginLeft: "-5px" }}>
+                        {this.state.data.fieldsOfStudy.map((field) => (
+                           <a href={"/search?q=" + field} target="_blank">
+                          <span className="paper-topic">{field}</span></a>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                  {this.state.paperApiData.topics && (
+                    <>
+                      <h2>Topics</h2>
+                      <div style={{ marginLeft: "-5px" }}>
+                        {this.state.paperApiData.topics.map((topic) => (
+                          <a href={"/search?q=" + topic.topic} target="_blank">
+                            <span className="paper-topic">{topic.topic}</span>
+                          </a>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
                   {this.state.data.pdfUrls &&
                   (this.state.data.pdfUrls.length > 0 ||
                     this.state.data.s2PdfUrl.length != 0) ? (
@@ -182,25 +266,51 @@ export class Details extends Component {
             )}
           </div>
           <div style={{ clear: "both" }}></div>
-          {/* <div className="details-references">
-            <h1>13 References </h1>
-            <ol>
-              <li>
-                <div>
-                  H Chen, S S Tsai, G Schroth, D M Chen, R Grzeszczuk, B Girod
+          {this.state.data.outCitations != 0 && (
+            <div className="details-references">
+              <h1>References </h1>
+
+              {this.state.referencesLoading ? (
+                <div style={{ marginTop: "10px" }}>
+                  <Skeleton
+                    active
+                    title={false}
+                    paragraph={{ rows: 1, width: "100%" }}
+                  />
                 </div>
-                <div>
-                  Robust text detection in natural images with edge-enhanced
-                  Maximally Stable Extremal Regions
-                </div>
-                <div>
-                  18th IEEE International Conference on Image Processing, p. 234
-                  - 239
-                </div>
-                <div>Posted: 2011</div>
-              </li>
-            </ol>
-          </div> */}
+              ) : (
+                <ol>
+                  {this.state.references.map((reference, index) => (
+                    <li key={index}>
+                      <h1>
+                        <a
+                          href={"/paper-details/" + reference.id}
+                          target="_blank"
+                        >
+                          {reference.title}
+                        </a>
+                      </h1>
+                      <h2>
+                        {reference.authors.map((author) => (
+                          <span
+                            className="search-result-author"
+                            key={author.name}
+                          >
+                            {author.name + ""}
+                          </span>
+                        ))}
+                        {" - "}
+                        <span className="search-result-date">
+                          {reference.year}
+                        </span>
+                      </h2>
+                      {reference.paperAbstract.slice(0, 300)} ...
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </div>
+          )}
         </div>
         <div style={{ clear: "both" }}></div>
         <br />

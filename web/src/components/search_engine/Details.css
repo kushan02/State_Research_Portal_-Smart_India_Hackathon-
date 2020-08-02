@@ -53,12 +53,33 @@
 .details-abstract {
 }
 .details-references {
+  margin-top: 10px;
+  padding: 10px;
+  width: 80%;
+  padding-left: 40px;
+}
+.details-references ol{
   /* margin-top: 30px; */
-  padding: 30px;
+  padding: 0px;
+  margin-top: 10px;
+}
+.details-references ol li{
+  /* margin-top: 30px; */
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  list-style-type: none;
+  border-bottom: 1px solid rgb(209, 209, 209);
 }
 .details-references h1 {
-  font-size: 18px;
+  font-size: 16px;
   text-decoration: underline;
+  margin-bottom: 2px;
+}
+.details-references h2 {
+  margin: 0px;
+  margin-bottom: 2px;
+  font-size: 14px;
+
 }
 .paper-details-citation-icon {
   margin-right: 5px;
@@ -109,6 +130,15 @@
 .details-open-pdf-text {
   color: rgb(124, 124, 124);
 }
+.paper-topic{
+  border: 1px solid rgb(177, 168, 168);
+  margin: 5px;
+  display: inline-block;
+  padding: 5px;
+  border-radius: 5px;
+  color: rgba(0, 0, 0, 0.65);
+  background-color: rgba(236, 236, 236, 0.596);
+}
 
 @media only screen and (max-width: 880px) {
   .details-outer-div {
@@ -128,6 +158,9 @@
     padding: 15px;
   }
   .details-left-div {
+    width: 100%;
+  }
+  .details-references {
     width: 100%;
   }
 }
