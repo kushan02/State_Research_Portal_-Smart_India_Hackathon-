@@ -4,9 +4,7 @@ import Footer from "./footer/Footer.jsx";
 import "./Papers.css";
 import constants from "../constants";
 import axios from "axios";
-import { Tag, Table, Button, Row, Col } from "antd";
-import { Card } from "antd";
-import { Layout, Menu, Breadcrumb } from 'antd';
+import {Button, Card, Col, Layout, Menu, Row, Table, Tag} from "antd";
 // import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 
 const { SubMenu } = Menu;
@@ -114,32 +112,43 @@ export class Papers extends Component {
               <div style={{
                     width:'25%',
               }}>
-                  <Card title="Author Details" style={{ width: 260, height:'70vh', borderRadius:'5px' }}>
-                       <p>Charotar University of Science and Technology </p>
-                       Department of Computer Science and Engineering Anand, India
-                            <br/><br/>
-                            <p><h4>Current position</h4></p>
-Student, Devang Patel Institute of Advance Technology , CSE
-                    </Card>
+                  <Card title="Author Details" style={{
+                      width: 260,
+                      height: '70vh',
+                      border: '1px solid rgb(207, 207, 207)',
+                      borderRadius: '5px'
+                  }}>
+                      <p>Charotar University of Science and Technology </p>
+                      Department of Computer Science and Engineering Anand, India
+                      <br/><br/>
+                      <p><h4>Current position</h4></p>
+                      Student, Devang Patel Institute of Advance Technology , CSE
+                      <img style={{marginLeft: "40px", marginTop: '40px'}} width={"60%"} src={require("./logo.jpg")}
+                           alt="Flowers in Chania"/>
+                  </Card>
               </div>
             </div>
 
             <div className="profile-main-outer-div" style={{
                 marginTop:'-57px'
             }}>
-              <div className="papers-inner-div">
-                  <h1>Amit Ganatra<Button size="large" id="contact-button">Contact</Button></h1>
-                  Charotar University of Science and Technology | CHARUSAT · Department of Computer Engineering
-                  <br/>
-                  Doctor of Philosophy
-                  <br/><br/>
-                  <h3>Skills</h3>
-                  <Tag style={{padding:'3px',borderRadius:'7px'}}>Data Analytics</Tag>
-                  <Tag style={{padding:'3px',borderRadius:'7px'}}>Bought a wagonr after selling the same.</Tag>
-                  <Tag style={{padding:'3px',borderRadius:'7px'}}>Changing questions based on answers.</Tag>
+                <div className="papers-inner-div">
+                    <h1>Mitanshu Bhatt<Button ghost size="large" type="primary" id="contact-button">Contact</Button>
+                    </h1>
+                    Charotar University of Science and Technology | DEPSTAR · Department of Computer Science and
+                    Engineering
+                    <br/>
+                    Pursuing B.Tech in Computer Science and Engineering
+                    <br/><br/>
+                    <h3>Skills</h3>
+                    <Tag color="geekblue" style={{padding: '2.8px', borderRadius: '7px'}}>Data Analytics</Tag>
+                    <Tag color="geekblue" style={{padding: '2.8px', borderRadius: '7px'}}>Web Development</Tag>
+                    <Tag color="geekblue" style={{padding: '2.8px', borderRadius: '7px'}}>Cyber Security</Tag>
+                    <Tag color="geekblue" style={{padding: '2.8px', borderRadius: '7px'}}>Theory of Computation</Tag>
+                    <Tag color="geekblue" style={{padding: '2.8px', borderRadius: '7px'}}>Compiler Design</Tag>
+                    <Tag color="geekblue" style={{padding: '2.8px', borderRadius: '7px'}}>Assembly Programming</Tag>
 
-
-              </div>
+                </div>
 
           </div>
 

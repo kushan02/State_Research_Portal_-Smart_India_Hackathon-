@@ -2,7 +2,7 @@
     /* background-color: red; */
     width: 90%;
     margin: auto;
-     margin-top: 40px;
+    margin-top: 40px;
     border: 1px solid rgb(207, 207, 207);
     border-radius: 5px;
     /* padding: 20px; */
@@ -13,13 +13,16 @@
 
 }
 
+.ant-tag {
+    margin-bottom: 6px;
+}
 
-.summary-row{
-    padding-left:20%;
+.summary-row {
+    padding-left: 20%;
     font-size: 16px;
 }
-#contact-button{
-    margin-left: 63%;
+#contact-button {
+    margin-left: 65%;
 }
 .profile-menu{
     width: 90%;
