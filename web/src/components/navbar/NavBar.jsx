@@ -28,7 +28,8 @@ class NavBar extends Component {
             this.setState({
                 isLogin: true,
                 user_name: localStorage.getItem("user_name"),
-                user_email: localStorage.getItem("user_email")
+                user_email: localStorage.getItem("user_email"),
+                user_id: localStorage.getItem("user_id")
             });
         }
     };
@@ -88,8 +89,9 @@ class NavBar extends Component {
                                             </Link>
                                         </Menu.Item>
                                         <Menu.Item key="1">
-                                            <Link to="/papers">
-                                                <a>My Profile</a>
+                                            <Link
+                                                to={"/author/" + this.state.user_name.replace(/\s+/g, '-') + "/" + this.state.user_id + "/"}>
+                                                <a>My Papers</a>
                                             </Link>
                                         </Menu.Item>
                                         {/* <Menu.Item key="1">
