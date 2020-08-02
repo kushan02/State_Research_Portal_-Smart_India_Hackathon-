@@ -41,8 +41,6 @@ class FormStepFinal extends React.Component {
       if (!err) {
         console.log("Received values of form: ", values);
         message.success("Processing complete!");
-        let allFormData={...this.props.formData,...values}
-        console.log(allFormData)
       } else {
         window.scroll({ top: 0, left: 0, behavior: "smooth" });
         message.error("Please complete filling the author details");
