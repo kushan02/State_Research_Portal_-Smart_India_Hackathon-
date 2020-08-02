@@ -35,9 +35,9 @@ class App extends Component {
                 <Route exact path="/upload-paper/" render={props => <StepForm {...props}/>}/>
                 <Route exact path="/reset-password-form/" render={props => <ResetPassword {...props}/>}/>
                 {/* <Route exact path="/forgot-password" render={props => <ForgotPassword {...props}/>} /> */}
-                <Route exact path="/papers/" render={props => <Papers {...props}/>}/>
+                <Route exact path="/author/:name/:id" render={props => <Papers {...props}/>}/>
                 <Route path="/profile/" render={props => <Profile {...props}/>}/>
-                <Route path="/search" render={props => <SearchResultCopy {...props}/>}/>
+                <Route path="/papers/:search?" render={props => <SearchResultCopy {...props}/>}/>
                 <Route exact path="/" render={props => <Home {...props}/>}/>
                 <Route exact path="/paper-details/:id"
                        render={props => <Details {...props}/>}

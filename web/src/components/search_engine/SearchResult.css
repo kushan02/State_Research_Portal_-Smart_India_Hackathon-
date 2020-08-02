@@ -225,12 +225,39 @@ background: #7cc0e6;
     padding: 0px;
 
   }
-  .result-filter-outer-div {
-    width: 95%;
-  }
+
+    .result-filter-outer-div {
+        width: 95%;
+    }
 }
+
 @media only screen and (min-width: 750px) {
-  .filters-show-hide-buttons{
-    display: none !important;
-  }
+    .filters-show-hide-buttons {
+        display: none !important;
+    }
+}
+
+
+.related-topics-tag-cloud {
+    margin: 10px;
+    font-size: 14px !important;
+}
+
+.related-topics-loader {
+    margin: 10px;
+    font-size: 14px !important;
+}
+
+.search-result-results > div:nth-child(2) {
+    margin-top: 7px !important;
+    font-size: 14px !important;
+}
+
+.search-result-stats {
+    margin-left: 10px !important;
+    font-size: 13px !important;
+}
+
+.related-topics-tag-cloud span {
+    font-size: 14px !important;
 }

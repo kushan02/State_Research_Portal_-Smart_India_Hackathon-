@@ -17,218 +17,279 @@ import axios from "axios";
 
 const {Step} = Steps;
 
-class UploadPaper extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      current: 0,
-      paperExistComponent: false,
-      firstStepButtonLoading: false,
-      paperExistDetails: {},
-    };
-  }
+function editDistance(s1, s2) {
+    s1 = s1.toLowerCase();
+    s2 = s2.toLowerCase();
 
-  paperExistNo = () => {
-    console.log("paperExistNo");
-    this.setState({ paperExistComponent: false });
-    const current = this.state.current + 1;
-    this.setState({ current });
-  };
-  paperExistYes = () => {
-    console.log("paperExistYes");
-    message.success(
-      "Success! Research Paper has been linked with your profile"
-    );
-  };
-  // handleSubmit = e => {
-  //   this.next();
-  //   if(this.state.current==0){
-  //     // this.handleFirstFormSubmit(e);
-  //   }
-  //   // alert("parent")
-
-  // };
-  handleFirstFormSubmit = (e) => {
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log("Received values of form parent:", values);
-        if (values.title) {
-          this.setState({ firstStepButtonLoading: true });
-          // fetch(constants.elasticSearchUrl + constants.elasticSearchAppName +"/_search", {
-          //   method: "POST",
-          //   body: JSON.stringify({
-          //     title:values.title,
-          //     doi:values.doi || ""
-          //   })
-          // })
-          // fetch(constants.elasticSearchUrl + constants.elasticSearchAppName + "/_search?q=title:" + values.title)
-          //   .then(response => {
-          //     // console.log(response)
-          //     if (response.status == 200) {
-          //       return response.json();
-          //     } else {
-          //       message.error("Error!");
-          //       this.setState({ firstStepButtonLoading: false });
-          //     }
-          //   })
-          //   .then(myJson => {
-          //     let responseDetails=myJson.hits.hits[0]._source
-
-          //     // console.log(myJson.hits.hits.length);
-          //     if (true) {
-          //       this.setState({
-          //         paperExistDetails: responseDetails
-          //       });
-          //       this.setState({
-          //         firstStepButtonLoading: false,
-          //         paperExistComponent: true
-          //       });
-          //     } else {
-          //       this.next();
-          //     }
-          //   })
-          //   .catch(err => {
-          //     console.log("Fetch Error :-S", err);
-          //     message.error("Error!");
-          //     this.setState({ firstStepButtonLoading: false });
-          //   });
-
-          axios
-            .get(
-              constants.elasticSearchUrl +
-                constants.elasticSearchAppName +
-                "/_search?q=title:" +
-                values.title
-            )
-            .then((res) => {
-              console.log(res);
-              let responseDetails = res.data.hits.hits[0]._source;
-
-              // console.log(myJson.hits.hits.length);
-              if (true) {
-                this.setState({
-                  paperExistDetails: responseDetails,
-                });
-                this.setState({
-                  firstStepButtonLoading: false,
-                  paperExistComponent: true,
-                });
-              } else {
-                this.next();
-              }
-            })
-            .catch((err) => {
-              console.error(err);
-              message.error("Error!");
-              this.setState({ firstStepButtonLoading: false });
-            });
-
-          // this.next();
+    var costs = new Array();
+    for (var i = 0; i <= s1.length; i++) {
+        var lastValue = i;
+        for (var j = 0; j <= s2.length; j++) {
+            if (i == 0)
+                costs[j] = j;
+            else {
+                if (j > 0) {
+                    var newValue = costs[j - 1];
+                    if (s1.charAt(i - 1) != s2.charAt(j - 1))
+                        newValue = Math.min(Math.min(newValue, lastValue),
+                            costs[j]) + 1;
+                    costs[j - 1] = lastValue;
+                    lastValue = newValue;
+                }
+            }
         }
-      }
-    });
-  };
-  handleSecondFormSubmit = (e) => {
-    this.next();
-  };
-  // handleSubmit = e => {
-  //       alert("1");
+        if (i > 0)
+            costs[s2.length] = lastValue;
+    }
+    return costs[s2.length];
+}
 
-  //   // console.log("handleSubmit")
-  //   e.preventDefault();
-  //   this.props.form.validateFields((err, values) => {
-  //     if (!err) {
-  //       console.log('Received values of form: ', values);
-  //     }
-  //   });
-  // };
+function similarity(s1, s2) {
+    var longer = s1;
+    var shorter = s2;
+    if (s1.length < s2.length) {
+        longer = s2;
+        shorter = s1;
+    }
+    var longerLength = longer.length;
+    if (longerLength == 0) {
+        return 1.0;
+    }
+    return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+}
 
-  // validateInput = () => {
-  //   alert("2");
+class UploadPaper extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            current: 0,
+            paperExistComponent: false,
+            firstStepButtonLoading: false,
+            paperExistDetails: {},
+        };
+    }
 
-  //   // document.getElementById("lookup-paper-button").click();
-  //   this.props.form.validateFields((err, values) => {
-  //     if (!err) {
-  //       console.log("Received values of form:", values);
-  //       if (values.title) {
-  //         this.next();
-  //       }
-  //     }
-  //   });
-  //   // alert("sadjhdasjh");
-  //   // this.next();
-  // };
+    paperExistNo = () => {
+        console.log("paperExistNo");
+        this.setState({paperExistComponent: false});
+        const current = this.state.current + 1;
+        this.setState({current});
+    };
+    paperExistYes = () => {
 
-  next = () => {
-    // console.log(this.state.current)
-    // this.props.form.validateFields((err, values) => {
-    //   if (!err) {
-    //     console.log("Received values of form:", values);
-    //     if (values.title) {
-    //       // this.next();
-    //     }
+        // TODO: Somehow get the values of all authors which showed up in the paper result in previous step
+        var author_names = ["Amit Ganatra", "Parth Shah", "Kushan Mehta"];
+
+        var paper_authentic = false;
+
+        for (var a_name of author_names) {
+            var similarity_score = similarity(localStorage.getItem("user_name"), a_name);
+            console.log("Similarity: " + localStorage.getItem("user_name") + ", " + a_name + " = " + similarity_score);
+            if (similarity_score >= 0.65) {
+                paper_authentic = true;
+                break;
+            }
+        }
+
+        console.log("paperExistYes");
+
+        if (paper_authentic) {
+            message.success(
+                "Success! Research Paper has been linked with your profile"
+            );
+        } else {
+            message.error("Error: We couldn't verify that you are one of the author of this paper.")
+        }
+    };
+    // handleSubmit = e => {
+    //   this.next();
+    //   if(this.state.current==0){
+    //     // this.handleFirstFormSubmit(e);
     //   }
-    // });
-    const current = this.state.current + 1;
-    this.setState({ current });
-  };
+    //   // alert("parent")
 
-  prev = () => {
-    const current = this.state.current - 1;
-    this.setState({ current });
-  };
+    // };
+    handleFirstFormSubmit = (e) => {
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log("Received values of form parent:", values);
+                if (values.title) {
+                    this.setState({firstStepButtonLoading: true});
+                    // fetch(constants.elasticSearchUrl + constants.elasticSearchAppName +"/_search", {
+                    //   method: "POST",
+                    //   body: JSON.stringify({
+                    //     title:values.title,
+                    //     doi:values.doi || ""
+                    //   })
+                    // })
+                    // fetch(constants.elasticSearchUrl + constants.elasticSearchAppName + "/_search?q=title:" + values.title)
+                    //   .then(response => {
+                    //     // console.log(response)
+                    //     if (response.status == 200) {
+                    //       return response.json();
+                    //     } else {
+                    //       message.error("Error!");
+                    //       this.setState({ firstStepButtonLoading: false });
+                    //     }
+                    //   })
+                    //   .then(myJson => {
+                    //     let responseDetails=myJson.hits.hits[0]._source
 
-  render() {
-    const { current } = this.state;
-    let steps = [
-      {
-        title: "Paper Lookup",
-        content: (
-          <First
-            form={this.props.form}
-            buttonLoading={this.state.firstStepButtonLoading}
-            handleFirstFormSubmit={this.handleFirstFormSubmit}
-          />
-        ),
-      },
-      {
-        title: "Paper Details",
-        content: (
-          <Second
-            form={this.props.form}
-            prev={this.prev}
-            handleSecondFormSubmit={this.handleSecondFormSubmit}
-          />
-        ),
-      },
-      {
-        title: "Author Details",
-        content: <Third form={this.props.form} prev={this.prev} />,
-      },
-    ];
-    return (
-      <React.Fragment>
-        <div className="navbar-outer-div">
-          <NavBar />
-        </div>
-        <div style={{ paddingTop: "90px" }}></div>
-        <div className="login-form step-outer-container">
-          {!this.state.paperExistComponent ? (
-            <Form
-            // onSubmit={this.handleSubmit}
+                    //     // console.log(myJson.hits.hits.length);
+                    //     if (true) {
+                    //       this.setState({
+                    //         paperExistDetails: responseDetails
+                    //       });
+                    //       this.setState({
+                    //         firstStepButtonLoading: false,
+                    //         paperExistComponent: true
+                    //       });
+                    //     } else {
+                    //       this.next();
+                    //     }
+                    //   })
+                    //   .catch(err => {
+                    //     console.log("Fetch Error :-S", err);
+                    //     message.error("Error!");
+                    //     this.setState({ firstStepButtonLoading: false });
+                    //   });
 
-            // style={{ width: "70%", margin: "auto", paddingTop: "3%" ,paddingBottom:"30px"}}
-            >
-              <div>
-                <Steps current={current}>
-                  {steps.map((item) => (
-                    <Step key={item.title} title={item.title} />
-                  ))}
-                </Steps>
-                <Divider />
-                <div className="steps-content">{steps[current].content}</div>
-                <div className="steps-action steps-action-button-button">
-                  {/* {current > 0 && (
+                    axios
+                        .get(
+                            constants.elasticSearchUrl +
+                            constants.elasticSearchAppName +
+                            "/_search?q=title:" +
+                            values.title
+                        )
+                        .then((res) => {
+                            console.log(res);
+                            let responseDetails = res.data.hits.hits[0]._source;
+
+                            // console.log(myJson.hits.hits.length);
+                            if (true) {
+                                this.setState({
+                                    paperExistDetails: responseDetails,
+                                });
+                                this.setState({
+                                    firstStepButtonLoading: false,
+                                    paperExistComponent: true,
+                                });
+                            } else {
+                                this.next();
+                            }
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                            message.error("Error!");
+                            this.setState({firstStepButtonLoading: false});
+                        });
+
+                    // this.next();
+                }
+            }
+        });
+    };
+    handleSecondFormSubmit = (e) => {
+        this.next();
+    };
+    // handleSubmit = e => {
+    //       alert("1");
+
+    //   // console.log("handleSubmit")
+    //   e.preventDefault();
+    //   this.props.form.validateFields((err, values) => {
+    //     if (!err) {
+    //       console.log('Received values of form: ', values);
+    //     }
+    //   });
+    // };
+
+    // validateInput = () => {
+    //   alert("2");
+
+    //   // document.getElementById("lookup-paper-button").click();
+    //   this.props.form.validateFields((err, values) => {
+    //     if (!err) {
+    //       console.log("Received values of form:", values);
+    //       if (values.title) {
+    //         this.next();
+    //       }
+    //     }
+    //   });
+    //   // alert("sadjhdasjh");
+    //   // this.next();
+    // };
+
+    next = () => {
+        // console.log(this.state.current)
+        // this.props.form.validateFields((err, values) => {
+        //   if (!err) {
+        //     console.log("Received values of form:", values);
+        //     if (values.title) {
+        //       // this.next();
+        //     }
+        //   }
+        // });
+        const current = this.state.current + 1;
+        this.setState({current});
+    };
+
+    prev = () => {
+        const current = this.state.current - 1;
+        this.setState({current});
+    };
+
+    render() {
+        const {current} = this.state;
+        let steps = [
+            {
+                title: "Paper Lookup",
+                content: (
+                    <First
+                        form={this.props.form}
+                        buttonLoading={this.state.firstStepButtonLoading}
+                        handleFirstFormSubmit={this.handleFirstFormSubmit}
+                    />
+                ),
+            },
+            {
+                title: "Paper Details",
+                content: (
+                    <Second
+                        form={this.props.form}
+                        prev={this.prev}
+                        handleSecondFormSubmit={this.handleSecondFormSubmit}
+                    />
+                ),
+            },
+            {
+                title: "Author Details",
+                content: <Third form={this.props.form} prev={this.prev}/>,
+            },
+        ];
+        return (
+            <React.Fragment>
+                <div className="navbar-outer-div">
+                    <NavBar/>
+                </div>
+                <div style={{paddingTop: "90px"}}></div>
+                <div className="login-form step-outer-container">
+                    {!this.state.paperExistComponent ? (
+                        <Form
+                            // onSubmit={this.handleSubmit}
+
+                            // style={{ width: "70%", margin: "auto", paddingTop: "3%" ,paddingBottom:"30px"}}
+                        >
+                            <div>
+                                <Steps current={current}>
+                                    {steps.map((item) => (
+                                        <Step key={item.title} title={item.title}/>
+                                    ))}
+                                </Steps>
+                                <Divider/>
+                                <div className="steps-content">{steps[current].content}</div>
+                                <div className="steps-action steps-action-button-button">
+                                    {/* {current > 0 && (
                     <Button
                       style={{ marginLeft: 8 }}
                       onClick={() => this.prev()}
@@ -236,7 +297,7 @@ class UploadPaper extends React.Component {
                       Previous
                     </Button>
                   )} */}
-                  {/* {current < steps.length - 1 && (
+                                    {/* {current < steps.length - 1 && (
                   <Button
                     style={{ marginLeft: "10px" }}
                     type="primary"
@@ -246,7 +307,7 @@ class UploadPaper extends React.Component {
                     Next
                   </Button>
                 )} */}
-                  {/* {current === steps.length - 1 && (
+                                    {/* {current === steps.length - 1 && (
                     <Button
                       style={{ marginLeft: "10px" }}
                       type="primary"
@@ -256,28 +317,28 @@ class UploadPaper extends React.Component {
                       Done
                     </Button>
                   )} */}
+                                </div>
+                            </div>
+                        </Form>
+                    ) : (
+                        <PaperExist
+                            data={this.state.paperExistDetails}
+                            paperExistNo={this.paperExistNo}
+                            paperExistYes={this.paperExistYes}
+                        />
+                    )}
                 </div>
-              </div>
-            </Form>
-          ) : (
-            <PaperExist
-              data={this.state.paperExistDetails}
-              paperExistNo={this.paperExistNo}
-              paperExistYes={this.paperExistYes}
-            />
-          )}
-        </div>
-        {/* <div className="home-footer"> */}
-        <br />
-        <br />
-        <br />
-        <br />
+                {/* <div className="home-footer"> */}
+                <br/>
+                <br/>
+                <br/>
+                <br/>
 
-        <Footer />
-        {/* </div> */}
-      </React.Fragment>
-    );
-  }
+                <Footer/>
+                {/* </div> */}
+            </React.Fragment>
+        );
+    }
 }
 
 const Final = Form.create()(UploadPaper);

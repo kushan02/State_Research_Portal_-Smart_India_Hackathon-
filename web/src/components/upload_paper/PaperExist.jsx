@@ -17,14 +17,15 @@ export class PaperExist extends Component {
                     <Descriptions.Item label="Doi" span={3}>
 
                         {this.props.data.doi ?
-                            <a href={this.props.data.doiUrl} target="black">this.props.data.doi</a> : "-----"
+                            <a href={!this.props.data.doiUrl ? "#" : this.props.data.doiUrl}
+                               target="black">{!this.props.data.doi ? "--" : this.props.data.doi}</a> : "-----"
                         }
 
                     </Descriptions.Item>
-                    <Descriptions.Item label="Year" span={3}>
+                    <Descriptions.Item label="Year Published" span={3}>
                         {this.props.data.year}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Citation Count" span={3}>
+                    <Descriptions.Item label="Citations" span={3}>
                         {this.props.data.citationCount}
                     </Descriptions.Item>
                     <Descriptions.Item label="Authors" span={3}>
@@ -36,9 +37,15 @@ export class PaperExist extends Component {
                             {this.props.data.journalName}
                         </Descriptions.Item>
                     )}
+                    {this.props.data.fieldsOfStudy && (
+                        <Descriptions.Item label="Fields of Study" span={3}>
+                            {this.props.data.fieldsOfStudy &&
+                            this.props.data.fieldsOfStudy.map(field => field + ", ")}
+                        </Descriptions.Item>
+                    )}
                     {this.props.data.pdfUrls &&
                     (this.props.data.pdfUrls.length > 0 ||
-                        this.props.data.s2PdfUrl.length != 0) ? (
+                        this.props.data.s2PdfUrl.length !== 0) ? (
                         <Descriptions.Item label="PDF" span={3}>
                             <a
                                 target="black"
