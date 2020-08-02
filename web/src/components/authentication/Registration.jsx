@@ -15,6 +15,16 @@ import {
 
 import constants from "../../constants";
 
+import {WithContext as ReactTags} from 'react-tag-input';
+
+
+const KeyCodes = {
+    comma: 188,
+    enter: 13,
+};
+
+const delimiters = [KeyCodes.comma, KeyCodes.enter];
+
 const {Option} = Select;
 const {TextArea} = Input;
 const AutoCompleteOption = AutoComplete.Option;
@@ -22,23 +32,40 @@ const AutoCompleteOption = AutoComplete.Option;
 class RegistrationForm extends React.Component {
     state = {
         confirmDirty: false,
-        autoCompleteResult: []
+        autoCompleteResult: [],
+        tags: []
+    };
+    handleDelete = (i) => {
+        const {tags} = this.state;
+        this.setState({
+            tags: tags.filter((tag, index) => index !== i),
+        });
+    };
+
+    handleAddition = (tag) => {
+        this.setState(state => ({tags: [...state.tags, tag]}));
     };
 
     handleSubmit = e => {
         e.preventDefault();
-
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
+                var interest_tags = [];
+                for (var tag in this.state.tags) {
+                    interest_tags.push(this.state.tags[tag]["text"]);
+                }
+                var interests = {"interests": interest_tags};
+                interests = JSON.stringify(interests);
+
                 axios.post(constants.flaskServerUrl + "registration/", {
-                    fname: values.name,
+                    name: values.name,
                     password: values.password,
                     email: values.email,
                     institute: values.institute,
                     city: values.city,
                     phone_number: values.phone || "",
-                    hp: values.homepage || "",
-                    interests: ""
+                    homepage: values.homepage || "",
+                    interests: interests || ""
                 }).then(res => {
                     message.success(res.data);
                     console.log(res);
@@ -177,8 +204,8 @@ class RegistrationForm extends React.Component {
                             <span>
                                 Institute / Affiliation
                                     <Tooltip title="E.g., Anna University, PES University etc">
-                                        <Icon type="question-circle-o"/>
-                                    </Tooltip>
+                                    <Icon type="question-circle-o"/>
+                                </Tooltip>
                             </span>
                         }>{
                             getFieldDecorator("institute", {
@@ -194,25 +221,6 @@ class RegistrationForm extends React.Component {
                             )
                         }
                         </Form.Item>
-
-                        {/*Area of Interest*/}
-                        {/* Remove Area of interest for now */}
-                        {/* <Form.Item
-            label={
-              <span>
-                Area of Interest&nbsp;
-                <Tooltip title="E.g., Machine Learning, Aerospace, Data Analytics">
-                  <Icon type="question-circle-o" />
-                </Tooltip>
-              </span>
-            }
-          >
-          {getFieldDecorator('areaOfInterest', {
-                rules: [{ required: true, message: 'Please enter your area of Interest' }],
-          })
-          (<Select mode="tags" style={{ width: '100%' }} placeholder="Enter your area of Interests" required>
-          </Select>)}
-          </Form.Item> */}
 
                         <Form.Item label="City">{
                             getFieldDecorator("city", {
@@ -233,8 +241,8 @@ class RegistrationForm extends React.Component {
                             <span>
                                 Home Page
                                     <Tooltip title="E.g., http://xyz.abc or https://xyz.abc">
-                                        <Icon type="question-circle-o"/>
-                                    </Tooltip>
+                                    <Icon type="question-circle-o"/>
+                                </Tooltip>
                             </span>
                         }>{
                             getFieldDecorator("homepage", {
@@ -275,12 +283,25 @@ class RegistrationForm extends React.Component {
                             )
                         }
                         </Form.Item>
+                        <div>Interests :</div>
+                        <ReactTags
+                            inputFieldPosition="bottom"
+                            placeholder="Add Interests (Press enter to add tag)"
+                            inline={true}
+                            allowDragDrop={false}
+                            tags={this.state.tags}
+                            handleDelete={this.handleDelete}
+                            handleAddition={this.handleAddition}
+                            handleDrag={this.handleDrag}
+                            delimiters={delimiters}
+                        />
 
 
                         <Form.Item className="registration-register-button">
 
                             <Button className="registration-button" block type="primary"
-                                    htmlType="submit">
+                                    htmlType="submit"
+                                    style={{marginTop: 20}}>
                                 Register
                             </Button>
 
