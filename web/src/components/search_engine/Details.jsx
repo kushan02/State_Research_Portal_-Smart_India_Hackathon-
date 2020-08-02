@@ -2,11 +2,11 @@ import React, {Component} from "react";
 import "./Details.css";
 // import queryString from "query-string";
 
-import NavBar from "./navbar/NavBar.jsx";
-import Footer from "./footer/Footer.jsx";
+import NavBar from "../navbar/NavBar.jsx";
+import Footer from "../footer/Footer.jsx";
 
 import {Skeleton, Icon} from "antd";
-import constants from "../constants";
+import constants from "../../constants";
 
 import axios from "axios";
 

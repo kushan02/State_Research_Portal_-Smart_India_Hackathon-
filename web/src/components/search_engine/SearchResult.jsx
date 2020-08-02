@@ -3,11 +3,11 @@ import React, {Component} from "react";
 import ReactDOM from "react-dom";
 import {withRouter, Link} from "react-router-dom";
 import queryString from "query-string";
-import NavBar from "./navbar/NavBar.jsx";
-import Footer from "./footer/Footer";
+import NavBar from "../navbar/NavBar.jsx";
+import Footer from "../footer/Footer";
 
 import "./SearchResult.css";
-import constants from "../constants";
+import constants from "../../constants";
 
 import {
   ReactiveBase,

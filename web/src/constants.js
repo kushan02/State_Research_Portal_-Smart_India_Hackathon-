@@ -1,6 +1,6 @@
-const elasticSearchUrl="http://192.168.0.100:9200/"
+const elasticSearchUrl="http://localhost:9200/"
 const elasticSearchAppName="research_portal"
-const flaskServerUrl=""
+const flaskServerUrl="http://127.0.0.1:5000/api/"
 module.exports = {
     elasticSearchUrl,
     elasticSearchAppName,

@@ -135,7 +135,7 @@ background:  linear-gradient(90deg, rgba(35,122,170,1) 66%, rgba(255,255,255,1) 
           rgba(35, 122, 170, 1) 50%,
           rgba(35, 122, 170, 1) 100%
   );
-  background-image: url(../assets/images/image.png);
+  background-image: url(../../assets/images/image.png);
   background-repeat: repeat-y;
   background-size: contain;
   /* background: rgb(255,255,255);
