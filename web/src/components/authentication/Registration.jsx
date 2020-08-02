@@ -7,7 +7,7 @@ import NavBar from "../navbar/NavBar.jsx";
 import Footer from "../footer/Footer";
 
 import "antd/dist/antd.css";
-import {message} from 'antd';
+import { message } from 'antd';
 
 import {
     Form, Input, Tooltip, Icon, Select, Checkbox, Button, AutoComplete
@@ -15,7 +15,7 @@ import {
 
 import constants from "../../constants";
 
-import {WithContext as ReactTags} from 'react-tag-input';
+import { WithContext as ReactTags } from 'react-tag-input';
 
 
 const KeyCodes = {
@@ -25,36 +25,38 @@ const KeyCodes = {
 
 const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
-const {Option} = Select;
-const {TextArea} = Input;
+const { Option } = Select;
+const { TextArea } = Input;
 const AutoCompleteOption = AutoComplete.Option;
 
 class RegistrationForm extends React.Component {
     state = {
         confirmDirty: false,
         autoCompleteResult: [],
-        tags: []
+        tags: [],
+        loading: false,
     };
     handleDelete = (i) => {
-        const {tags} = this.state;
+        const { tags } = this.state;
         this.setState({
             tags: tags.filter((tag, index) => index !== i),
         });
     };
 
     handleAddition = (tag) => {
-        this.setState(state => ({tags: [...state.tags, tag]}));
+        this.setState(state => ({ tags: [...state.tags, tag] }));
     };
 
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
+                this.setState({ loading: true })
                 var interest_tags = [];
                 for (var tag in this.state.tags) {
                     interest_tags.push(this.state.tags[tag]["text"]);
                 }
-                var interests = {"interests": interest_tags};
+                var interests = { "interests": interest_tags };
                 interests = JSON.stringify(interests);
 
                 axios.post(constants.flaskServerUrl + "registration/", {
@@ -68,10 +70,12 @@ class RegistrationForm extends React.Component {
                     interests: interests || ""
                 }).then(res => {
                     message.success(res.data);
+                    this.setState({loading:false})
                     console.log(res);
                     console.log(res.data);
                 }).catch(function (error) {
                     if (error.response) {
+                        this.setState({ loading: false })
                         message.error(error.response.data);
                         console.log(error.response.data);
                         console.log(error.response.status);
@@ -80,18 +84,18 @@ class RegistrationForm extends React.Component {
                 });
                 console.log("Received values of form: ", values);
             } else {
-                window.scroll({top: 0, left: 0, behavior: 'smooth'});
+                window.scroll({ top: 0, left: 0, behavior: 'smooth' });
             }
         });
     };
 
     handleConfirmBlur = e => {
-        const {value} = e.target;
-        this.setState({confirmDirty: this.state.confirmDirty || !!value});
+        const { value } = e.target;
+        this.setState({ confirmDirty: this.state.confirmDirty || !!value });
     };
 
     compareToFirstPassword = (rule, value, callback) => {
-        const {form} = this.props;
+        const { form } = this.props;
         if (value && value !== form.getFieldValue("password")) {
             callback("Passwords do not match, try again!");
         } else {
@@ -100,32 +104,32 @@ class RegistrationForm extends React.Component {
     };
 
     validateToNextPassword = (rule, value, callback) => {
-        const {form} = this.props;
+        const { form } = this.props;
         if (value && this.state.confirmDirty) {
-            form.validateFields(["confirm"], {force: true});
+            form.validateFields(["confirm"], { force: true });
         }
         callback();
     };
 
     onChange = e => {
-        this.setState({[e.target.name]: e.target.value});
+        this.setState({ [e.target.name]: e.target.value });
     };
 
     render() {
-        const {getFieldDecorator} = this.props.form;
-        const {autoCompleteResult} = this.state;
+        const { getFieldDecorator } = this.props.form;
+        const { autoCompleteResult } = this.state;
 
-        const prefixSelector = getFieldDecorator("prefix", {initialValue: "91"})(
-            <Select style={{width: 70}}>
+        const prefixSelector = getFieldDecorator("prefix", { initialValue: "91" })(
+            <Select style={{ width: 70 }}>
                 <Option value="91">+91</Option>
             </Select>
         );
 
         return (
             <React.Fragment>
-                <div className="navbar-outer-div"><NavBar/></div>
+                <div className="navbar-outer-div"><NavBar /></div>
 
-                <div style={{paddingTop: "90px"}}></div>
+                <div style={{ paddingTop: "90px" }}></div>
 
                 <div className="registration-container">
 
@@ -137,20 +141,20 @@ class RegistrationForm extends React.Component {
                             <span>
                                 Name
                                 <Tooltip title="Full Name as it appears on your research papers">
-                                    <Icon type="question-circle-o"/>
+                                    <Icon type="question-circle-o" />
                                 </Tooltip>
                             </span>
                         }>{
-                            getFieldDecorator("name", {
-                                rules: [{
-                                    required: true,
-                                    message: "Please input your Full Name.",
-                                    whitespace: true
-                                }]
-                            })(
-                                <Input placeholder="Enter your full name" name="fname"/>
-                            )
-                        }
+                                getFieldDecorator("name", {
+                                    rules: [{
+                                        required: true,
+                                        message: "Please input your Full Name.",
+                                        whitespace: true
+                                    }]
+                                })(
+                                    <Input placeholder="Enter your full name" name="fname" />
+                                )
+                            }
                         </Form.Item>
 
                         <Form.Item label="E-mail">{
@@ -163,7 +167,7 @@ class RegistrationForm extends React.Component {
                                     message: "Please input your email address"
                                 }]
                             })(
-                                <Input placeholder="Enter your Email Address" name="email"/>
+                                <Input placeholder="Enter your Email Address" name="email" />
                             )
                         }
                         </Form.Item>
@@ -177,7 +181,7 @@ class RegistrationForm extends React.Component {
                                     validator: this.validateToNextPassword
                                 }]
                             })(
-                                <Input.Password placeholder="Enter your password" name="password"/>
+                                <Input.Password placeholder="Enter your password" name="password" />
                             )
                         }
                         </Form.Item>
@@ -195,7 +199,7 @@ class RegistrationForm extends React.Component {
                                 ]
                             })(
                                 <Input.Password onBlur={this.handleConfirmBlur} placeholder="Confirm your Password"
-                                                name="cpass"/>
+                                    name="cpass" />
                             )
                         }
                         </Form.Item>
@@ -204,22 +208,22 @@ class RegistrationForm extends React.Component {
                             <span>
                                 Institute / Affiliation
                                     <Tooltip title="E.g., Anna University, PES University etc">
-                                    <Icon type="question-circle-o"/>
+                                    <Icon type="question-circle-o" />
                                 </Tooltip>
                             </span>
                         }>{
-                            getFieldDecorator("institute", {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: "Please input your Institute name",
-                                        whitespace: true
-                                    }
-                                ]
-                            })(
-                                <Input placeholder="Provide your Institute Name" name="institute"/>
-                            )
-                        }
+                                getFieldDecorator("institute", {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: "Please input your Institute name",
+                                            whitespace: true
+                                        }
+                                    ]
+                                })(
+                                    <Input placeholder="Provide your Institute Name" name="institute" />
+                                )
+                            }
                         </Form.Item>
 
                         <Form.Item label="City">{
@@ -232,7 +236,7 @@ class RegistrationForm extends React.Component {
                                     }
                                 ]
                             })(
-                                <Input placeholder="Enter your city" name="city"/>
+                                <Input placeholder="Enter your city" name="city" />
                             )
                         }
                         </Form.Item>
@@ -241,23 +245,23 @@ class RegistrationForm extends React.Component {
                             <span>
                                 Home Page
                                     <Tooltip title="E.g., http://xyz.abc or https://xyz.abc">
-                                    <Icon type="question-circle-o"/>
+                                    <Icon type="question-circle-o" />
                                 </Tooltip>
                             </span>
                         }>{
-                            getFieldDecorator("homepage", {
-                                rules: [
-                                    {required: false, message: "Please enter your Website"},
-                                    {
-                                        pattern: /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi,
-                                        message: "Please enter a valid URL",
-                                        whitespace: false
-                                    }
-                                ]
-                            })(
-                                <Input placeholder="Enter your Website" name="hp"/>
-                            )
-                        }
+                                getFieldDecorator("homepage", {
+                                    rules: [
+                                        { required: false, message: "Please enter your Website" },
+                                        {
+                                            pattern: /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi,
+                                            message: "Please enter a valid URL",
+                                            whitespace: false
+                                        }
+                                    ]
+                                })(
+                                    <Input placeholder="Enter your Website" name="hp" />
+                                )
+                            }
                         </Form.Item>
 
 
@@ -279,7 +283,7 @@ class RegistrationForm extends React.Component {
                                 ]
                             })(
                                 <Input placeholder="Enter your phone number" addonBefore={prefixSelector}
-                                       style={{width: "100%"}} name="phone_number"/>
+                                    style={{ width: "100%" }} name="phone_number" />
                             )
                         }
                         </Form.Item>
@@ -300,8 +304,9 @@ class RegistrationForm extends React.Component {
                         <Form.Item className="registration-register-button">
 
                             <Button className="registration-button" block type="primary"
-                                    htmlType="submit"
-                                    style={{marginTop: 20}}>
+                                htmlType="submit"
+                                style={{ marginTop: 20 }}
+                                loading={this.state.loading}>
                                 Register
                             </Button>
 
@@ -311,14 +316,14 @@ class RegistrationForm extends React.Component {
                     </Form>
                 </div>
 
-                <Footer/>
+                <Footer />
 
             </React.Fragment>
         );
     }
 }
 
-const WrappedRegistrationForm = Form.create({name: "register"})(
+const WrappedRegistrationForm = Form.create({ name: "register" })(
     RegistrationForm
 );
 
