@@ -1,6 +1,6 @@
 .papers-outer-div{
     /* background-color: red; */
-    width: 75%;
+    width: 90%;
     margin: auto;
      margin-top: 40px;
     border: 1px solid rgb(207, 207, 207);
@@ -12,8 +12,14 @@
     margin-bottom: 40px;
 
 }
+
+
+.summary-row{
+    padding-left:20%;
+    font-size: 16px;
+}
 #contact-button{
-    margin-left: 700px;
+    margin-left: 63%;
 }
 .profile-menu{
     width: 90%;
@@ -26,8 +32,9 @@
 }
 .profile-main-outer-div{
     /* background-color: red; */
-    width: 75%;
+    width: 90%;
     margin: auto;
+    /*margin-top: -50px;*/
 
     border: 1px solid rgb(207, 207, 207);
     border-radius: 5px;
@@ -58,3 +65,21 @@
 
     }
   }
+#components-layout-demo-top-side-2 .logo {
+  width: 120px;
+  height: 31px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px 28px 16px 0;
+  float: left;
+}
+
+
+.site-layout .site-layout-background {
+  background: #fff;
+}
+#components-layout-demo-fixed-sider .logo {
+  height: 32px;
+    width: 200px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
+}

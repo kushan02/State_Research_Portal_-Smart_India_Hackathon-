@@ -13,7 +13,7 @@ import {
   message,
 } from "antd";
 
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+// import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -54,7 +54,7 @@ class Account extends React.Component {
     confirm({
       okText: "Yes",
       title: "Are you sure you want to delete your account?",
-      icon: <ExclamationCircleOutlined />,
+      // icon: <ExclamationCircleOutlined />,
       content:
         "Once you confirm, all of your account data will be permanently deleted",
       onOk() {
@@ -70,7 +70,7 @@ class Account extends React.Component {
     confirm({
       okText: "Yes",
       title: "Are you sure you want to change your Email?",
-      icon: <ExclamationCircleOutlined />,
+      // icon: <ExclamationCircleOutlined />,
       // content: 'Once you confirm, all of your account data will be permanently deleted',
       onOk() {
         // return new Promise((resolve, reject) => {

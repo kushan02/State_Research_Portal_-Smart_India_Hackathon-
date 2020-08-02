@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Steps, Button, Form, message, Divider } from "antd";
+import React, {Component} from "react";
+import {Steps, Button, Form, message, Divider} from "antd";
 import ReactDOM from "react-dom";
 // import '/Users/meghasankhlecha/Desktop/Megha/SIH/Test/my-app/src/App.css';
 import First from "./FormStepOne";
@@ -15,47 +15,7 @@ import constants from "../../constants";
 
 import axios from "axios";
 
-const { Step } = Steps;
-
-function editDistance(s1, s2) {
-  s1 = s1.toLowerCase();
-  s2 = s2.toLowerCase();
-
-  var costs = new Array();
-  for (var i = 0; i <= s1.length; i++) {
-    var lastValue = i;
-    for (var j = 0; j <= s2.length; j++) {
-      if (i == 0) costs[j] = j;
-      else {
-        if (j > 0) {
-          var newValue = costs[j - 1];
-          if (s1.charAt(i - 1) != s2.charAt(j - 1))
-            newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
-          costs[j - 1] = lastValue;
-          lastValue = newValue;
-        }
-      }
-    }
-    if (i > 0) costs[s2.length] = lastValue;
-  }
-  return costs[s2.length];
-}
-
-function similarity(s1, s2) {
-  var longer = s1;
-  var shorter = s2;
-  if (s1.length < s2.length) {
-    longer = s2;
-    shorter = s1;
-  }
-  var longerLength = longer.length;
-  if (longerLength == 0) {
-    return 1.0;
-  }
-  return (
-    (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength)
-  );
-}
+const {Step} = Steps;
 
 class UploadPaper extends React.Component {
   constructor(props) {
@@ -65,7 +25,6 @@ class UploadPaper extends React.Component {
       paperExistComponent: false,
       firstStepButtonLoading: false,
       paperExistDetails: {},
-      formData: {},
     };
   }
 
@@ -76,48 +35,10 @@ class UploadPaper extends React.Component {
     this.setState({ current });
   };
   paperExistYes = () => {
-    // TODO: Somehow get the values of all authors which showed up in the paper result in previous step
-    // var author_names = ["Amit Ganatra", "Parth Shah", "Kushan Mehta"];
-    var author_names = this.state.paperExistDetails.authors.map(
-      (author) => author.name
-    );
-    console.log(author_names);
-    console.log(
-      this.state.paperExistDetails.authors.map((author) => author.name)
-    );
-
-    var paper_authentic = false;
-
-    for (var a_name of author_names) {
-      var similarity_score = similarity(
-        localStorage.getItem("user_name"),
-        a_name
-      );
-      console.log(
-        "Similarity: " +
-          localStorage.getItem("user_name") +
-          ", " +
-          a_name +
-          " = " +
-          similarity_score
-      );
-      if (similarity_score >= 0.65) {
-        paper_authentic = true;
-        break;
-      }
-    }
-
     console.log("paperExistYes");
-
-    if (paper_authentic) {
-      message.success(
-        "Success! Research Paper has been linked with your profile"
-      );
-    } else {
-      message.error(
-        "Error: We couldn't verify that you are one of the author of this paper."
-      );
-    }
+    message.success(
+      "Success! Research Paper has been linked with your profile"
+    );
   };
   // handleSubmit = e => {
   //   this.next();
@@ -133,7 +54,6 @@ class UploadPaper extends React.Component {
         console.log("Received values of form parent:", values);
         if (values.title) {
           this.setState({ firstStepButtonLoading: true });
-          this.setState({ formData: values });
           // fetch(constants.elasticSearchUrl + constants.elasticSearchAppName +"/_search", {
           //   method: "POST",
           //   body: JSON.stringify({
@@ -210,8 +130,6 @@ class UploadPaper extends React.Component {
   };
   handleSecondFormSubmit = (e) => {
     this.next();
-    console.log("second for parent value", e);
-    this.setState({ formData: { ...this.state.formData, ...e } });
   };
   // handleSubmit = e => {
   //       alert("1");
@@ -285,13 +203,7 @@ class UploadPaper extends React.Component {
       },
       {
         title: "Author Details",
-        content: (
-          <Third
-            form={this.props.form}
-            prev={this.prev}
-            formData={this.state.formData}
-          />
-        ),
+        content: <Third form={this.props.form} prev={this.prev} />,
       },
     ];
     return (

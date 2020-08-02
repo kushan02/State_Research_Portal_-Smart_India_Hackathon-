@@ -1,67 +1,79 @@
 import React, {Component} from "react";
-
-
 import NavBar from "./navbar/NavBar.jsx";
 import Footer from "./footer/Footer.jsx";
-
 import "./Papers.css";
 import constants from "../constants";
-
 import axios from "axios";
-import { Tag, Table, Button } from "antd";
+import { Tag, Table, Button, Row, Col } from "antd";
+import { Card } from "antd";
+import { Layout, Menu, Breadcrumb } from 'antd';
+// import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 
+const { SubMenu } = Menu;
+const { Header, Content, Sider } = Layout;
 
- const columns = [{
-    title: 'Quality',
-    dataIndex: 'Quality',
+ const columns = [
+  {
+    title: 'Paper Title',
+    dataIndex: 'papers',
+    filters: [
+      {
+        text: 'Joe',
+        value: 'Joe',
+      },
+      {
+        text: 'Jim',
+        value: 'Jim',
+      },
+    ],
+    onFilter: (value, record) => record.papers.indexOf(value) === 0,
+    sorter: (a, b) => a.papers.length - b.papers.length,
+    sortDirections: ['descend','ascend'],
   },
-
   {
     title: 'Citations',
-    dataIndex: 'Citations',
-    sorter: {
-      compare: (a, b) => a.Citations - b.Citations,
-      multiple: 2,
-    },
+    dataIndex: 'citations',
+    defaultSortOrder: 'descend',
+    sorter: (a, b) => a.citations - b.citations,
   },
   {
     title: 'Year',
-    dataIndex: 'Year',
-    sorter: {
-      compare: (a, b) => a.Year - b.Year,
-      multiple: 1,
-    },
+    dataIndex: 'year',
+    sorter: (a, b) => a.year - b.year,
+    sortDirections: ['descend','ascend'],
   },
 ];
+
  const data1 = [
   {
     key: '1',
-    Quality: 'Car Khareedo Becho',
-    Citations: 60,
-    Year: 70,
+    papers: 'John Brown',
+    citations: 32,
+    year: 2019,
   },
   {
     key: '2',
-    Quality: 'Ego - The power within',
-    Citations: 66,
-    Year: 89,
+    papers: 'Jim Green',
+    citations: 42,
+    year: 2001,
   },
   {
     key: '3',
-    Quality: 'WagonR - Chalti kaa naam WagonR',
-    Citations: 90,
-    Year: 70,
+    papers: 'Joe Black',
+    citations: 32,
+    year: 2004,
   },
   {
     key: '4',
-    Quality: 'Deep Learning algorithm to change questions automatically.',
-    Citations: 99,
-    Year: 89,
+    papers: 'Jim Red',
+    citations: 32,
+    year: 2017,
   },
 ];
-  function onChange(pagination, filters, sorter, extra) {
+
+function onChange(pagination, filters, sorter, extra) {
   console.log('params', pagination, filters, sorter, extra);
- }
+}
 export class Papers extends Component {
   state = {
     data: []
@@ -91,8 +103,30 @@ export class Papers extends Component {
         </div>
 
 
-        <div style={{paddingTop:"90px"}}>
-            <div className="profile-main-outer-div">
+
+
+        <div style={{paddingTop:"90px", width:'80%'}}>
+            <div style={{
+                marginLeft:'98%',
+                width:'25%',
+                height:'57px'
+            }}>
+              <div style={{
+                    width:'25%',
+              }}>
+                  <Card title="Author Details" style={{ width: 260, height:'70vh', borderRadius:'5px' }}>
+                       <p>Charotar University of Science and Technology </p>
+                       Department of Computer Science and Engineering Anand, India
+                            <br/><br/>
+                            <p><h4>Current position</h4></p>
+Student, Devang Patel Institute of Advance Technology , CSE
+                    </Card>
+              </div>
+            </div>
+
+            <div className="profile-main-outer-div" style={{
+                marginTop:'-57px'
+            }}>
               <div className="papers-inner-div">
                   <h1>Amit Ganatra<Button size="large" id="contact-button">Contact</Button></h1>
                   Charotar University of Science and Technology | CHARUSAT · Department of Computer Engineering
@@ -100,28 +134,46 @@ export class Papers extends Component {
                   Doctor of Philosophy
                   <br/><br/>
                   <h3>Skills</h3>
-                  <Tag>Selling Cars.</Tag>
-                  <Tag>Bought a wagonr after selling the same.</Tag>
-                  <Tag>Changing questions based on answers.</Tag>
-                  <br/><br/>
-                  <h3>About</h3>
-                  I buy cars. I sell cars. I have lots of ego and lots of data analytics left in me. Wanna piece of me? Come to my office and lets see kisme kitna hai dum.!
+                  <Tag style={{padding:'3px',borderRadius:'7px'}}>Data Analytics</Tag>
+                  <Tag style={{padding:'3px',borderRadius:'7px'}}>Bought a wagonr after selling the same.</Tag>
+                  <Tag style={{padding:'3px',borderRadius:'7px'}}>Changing questions based on answers.</Tag>
+
+
               </div>
 
           </div>
 
 
+            <div className="profile-main-outer-div">
+              <div className="papers-inner-div">
+                      <Row  className="summary-row" justify="space-between">
+                            <Col span={8}><h3>101</h3> </Col>
+                            <Col span={8}><h3>27,695</h3> </Col>
+                            <Col span={8}><h3>772</h3> </Col>
+                      </Row>
+                      <Row  className="summary-row" justify="space-between">
 
-        </div>
+                            <Col span={8}>Publications</Col>
+                            <Col span={8}>Reads</Col>
+                            <Col span={8}>Citations</Col>
+                      </Row>
+              </div>
+          </div>
         <div className="papers-outer-div">
 
         <div className="papers-inner-div">
 
+
           <h1>Papers</h1>
-            <Table columns={columns} dataSource={data1} onChange={onChange} />
+          	     <Table columns={columns} dataSource={data1} onChange={onChange} />
         </div>
         </div>
-        <Footer />
+
+        </div>
+
+
+
+          <Footer/>
       </React.Fragment>
     );
   }
