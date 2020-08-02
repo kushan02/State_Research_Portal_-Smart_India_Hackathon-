@@ -73,13 +73,13 @@ class RegistrationForm extends React.Component {
                     this.setState({loading:false})
                     console.log(res);
                     console.log(res.data);
-                }).catch(function (error) {
+                }).catch((error) =>{
                     if (error.response) {
                         this.setState({ loading: false })
-                        message.error(error.response.data);
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
+                        // message.error(error.response.data);
+                        console.log(error && error.response);
+                        // console.log(error.response.status);
+                        // console.log(error.response.headers);
                     }
                 });
                 console.log("Received values of form: ", values);

@@ -14,8 +14,8 @@ class Details extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log("Received values of form: ", values);
-                this.props.handleSecondFormSubmit();
+                console.log("Received values of form child: ", values);
+                this.props.handleSecondFormSubmit(values);
             } else {
                 window.scroll({top: 0, left: 0, behavior: 'smooth'})
             }
