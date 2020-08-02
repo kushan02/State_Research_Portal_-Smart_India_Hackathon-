@@ -8,7 +8,7 @@ import GoogleLogin from "react-google-login";
 import NavBar from "../navbar/NavBar.jsx";
 import Footer from "../footer/Footer";
 import axios from "axios";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
 
 import constants from "../../constants";
 
@@ -17,8 +17,7 @@ class NormalLoginForm extends React.Component {
     state = {
         loadingConformPassword: false,
         visibleConformPasswordPopup: false,
-        incorrectPasswordMessage: false,
-        loading: false
+        incorrectPasswordMessage: false
     };
 
     showConformPasswordModal = () => {
@@ -33,7 +32,7 @@ class NormalLoginForm extends React.Component {
             if (!err) {
                 console.log("Received values of form: ", values);
                 if (values["e-mail address"]) {
-                    this.setState({ loadingConformPassword: true });
+                    this.setState({loadingConformPassword: true});
                     setTimeout(() => {
                         message.info("Please check your email and click on the provided link to reset your password.", 5);
                         this.setState({
@@ -47,16 +46,15 @@ class NormalLoginForm extends React.Component {
     };
 
     handleConformPasswordCancel = () => {
-        this.setState({ visibleConformPasswordPopup: false });
+        this.setState({visibleConformPasswordPopup: false});
     };
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.setState({ incorrectPasswordMessage: false });
+        this.setState({incorrectPasswordMessage: false});
 
         this.props.form.validateFields(['email', 'password'], (err, values) => {
             if (!err) {
-                this.setState({ loading: true });
                 axios.post(constants.flaskServerUrl + 'login/', {
                     user_email: values.email,
                     password: values.password,
@@ -64,7 +62,6 @@ class NormalLoginForm extends React.Component {
                     console.log(res.status);
                     console.log(res.config.data);
                     if (res.status === 200) {
-                        this.setState({ loading: false });
                         message.success("Login successful. Redirecting you to homepage...");
                         localStorage.setItem('login-data', JSON.stringify(res.config.data));
 
@@ -74,9 +71,7 @@ class NormalLoginForm extends React.Component {
 
 
                     } else {
-                        this.setState({ incorrectPasswordMessage: true })
-                        this.setState({ loading: false });
-                        this.props.form.resetFields()
+                        this.setState({incorrectPasswordMessage: true})
                     }
                 })
                     .catch((error) => {
@@ -86,14 +81,10 @@ class NormalLoginForm extends React.Component {
                             console.log(error.response.headers);
 
                             if (error.response.status === 401) {
-                                this.setState({ incorrectPasswordMessage: true });
-                                this.setState({ loading: false });
+                                this.setState({incorrectPasswordMessage: true});
                                 message.error("Incorrect credentials entered. Please try again.", 5);
-                                this.props.form.resetFields()
                             } else {
-                                this.props.form.resetFields()
                                 message.error("Error! try again");
-                                this.setState({ loading: false });
                             }
                         }
                     });
@@ -109,7 +100,7 @@ class NormalLoginForm extends React.Component {
             message.success("Login via Google successful", 3);
             let user_name = response["profileObj"]["name"];
             let user_email = response["profileObj"]["email"];
-            let data = { "user_name": user_name, "user_email": user_email, "profile_completed": false };
+            let data = {"user_name": user_name, "user_email": user_email, "profile_completed": false};
             localStorage.setItem('google-oauth-data', JSON.stringify(data));
 
             setTimeout(() => {
@@ -120,7 +111,7 @@ class NormalLoginForm extends React.Component {
     };
 
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const {getFieldDecorator} = this.props.form;
 
 
         return (
@@ -133,7 +124,7 @@ class NormalLoginForm extends React.Component {
                     footer={[
                         <Button key="back" onClick={this.handleConformPasswordCancel}> Return </Button>,
                         <Button type="primary" loading={this.state.loadingConformPassword}
-                            onClick={this.handleConformPasswordOk}>
+                                onClick={this.handleConformPasswordOk}>
                             Submit
                         </Button>,
                     ]}>
@@ -147,27 +138,27 @@ class NormalLoginForm extends React.Component {
                                     type: "email"
                                 }],
                             })(
-                                <Input prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-                                    placeholder="E-mail address" />
+                                <Input prefix={<Icon type="user" style={{color: "rgba(0,0,0,.25)"}}/>}
+                                       placeholder="E-mail address"/>
                             )}
                         </Form.Item>
                     </Form>
                 </Modal>
 
-                <div className="navbar-outer-div"><NavBar /></div>
+                <div className="navbar-outer-div"><NavBar/></div>
 
-                <div style={{ paddingTop: "90px" }}></div>
+                <div style={{paddingTop: "90px"}}></div>
 
                 <Form onSubmit={this.handleSubmit} className="login-form-sign-in">
 
-                    <div style={{ width: "100%" }}>
+                    <div style={{width: "100%"}}>
                         <GoogleLogin
                             clientId={constants.google_oauth_client_id}
                             buttonText="Login With Google"
                             onSuccess={this.responseGoogle}
                             onFailure={this.responseGoogle}
                             cookiePolicy={"single_host_origin"}
-                            style={{ width: "100%" }}
+                            style={{width: "100%"}}
                         />
                     </div>
 
@@ -176,22 +167,22 @@ class NormalLoginForm extends React.Component {
                     <Form.Item>
                         {getFieldDecorator("email", {
                             rules: [
-                                { required: true, message: "Please enter your email", type: "email" },
+                                {required: true, message: "Please enter your email", type: "email"},
                             ]
                         })(
-                            <Input type="email" prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-                                placeholder="Email" />
+                            <Input type="email" prefix={<Icon type="user" style={{color: "rgba(0,0,0,.25)"}}/>}
+                                   placeholder="Email"/>
                         )}
                     </Form.Item>
 
                     <Form.Item>
                         {getFieldDecorator("password", {
                             rules: [
-                                { required: true, message: "Please enter your password" },
+                                {required: true, message: "Please enter your password"},
                             ],
                         })(
-                            <Input type="password" prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
-                                placeholder="Password" />
+                            <Input type="password" prefix={<Icon type="lock" style={{color: "rgba(0,0,0,.25)"}}/>}
+                                   placeholder="Password"/>
                         )}
                     </Form.Item>
 
@@ -200,28 +191,28 @@ class NormalLoginForm extends React.Component {
                             valuePropName: "checked",
                             initialValue: true,
                         })(
-                            <Checkbox style={{ paddingRight: "20%" }}>Remember me</Checkbox>
+                            <Checkbox style={{paddingRight: "20%"}}>Remember me</Checkbox>
                         )}
 
-                        <span style={{ color: "#1890ff", cursor: "pointer" }} onClick={this.showConformPasswordModal}>
+                        <span style={{color: "#1890ff", cursor: "pointer"}} onClick={this.showConformPasswordModal}>
                             Forgot password?
                         </span>
 
-                        <br />
+                        <br/>
 
                         {/*{this.state.incorrectPasswordMessage && <Tag color="red">Incorrect user id or password !</Tag>}*/}
 
-                        <Button type="primary" htmlType="submit" className="login-form-button" loading={this.state.loading}
-                            style={{ width: "100%", marginTop: "20px" }}>
+                        <Button type="primary" htmlType="submit" className="login-form-button"
+                                style={{width: "100%", marginTop: "20px"}}>
                             Log in
                         </Button>
                         Don't have an account?
-                        <Link to="/registration"> <span style={{ marginLeft: "5px" }}>Sign Up!</span> </Link>
+                        <Link to="/registration"> <span style={{marginLeft: "5px"}}>Sign Up!</span> </Link>
                     </Form.Item>
                 </Form>
 
                 <div className="home-footer">
-                    <Footer />
+                    <Footer/>
                 </div>
 
             </React.Fragment>
@@ -229,7 +220,7 @@ class NormalLoginForm extends React.Component {
     }
 }
 
-const WrappedNormalLoginForm = Form.create({ name: "normal_login" })(
+const WrappedNormalLoginForm = Form.create({name: "normal_login"})(
     NormalLoginForm
 );
 

@@ -37,8 +37,8 @@ class RegistrationForm extends React.Component {
                     institute: values.institute,
                     city: values.city,
                     phone_number: values.phone || "",
-                    bio: values.bio || "",
-                    hp: values.homepage || ""
+                    hp: values.homepage || "",
+                    interests: ""
                 }).then(res => {
                     message.success(res.data);
                     console.log(res);
