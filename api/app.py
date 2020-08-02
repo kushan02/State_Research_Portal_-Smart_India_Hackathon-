@@ -32,6 +32,23 @@ def connect_elasticsearch(url='54.237.93.158', port=9200):
 
 es = connect_elasticsearch()
 
+@app.route('/api/paper_details/', methods=['GET'])
+@cross_origin()
+def get_paper_details():
+    paper_id = request.args.get("id")
+    doc = {
+        'size': 1,
+        'query': {
+            'match': {
+                '_id': paper_id
+            }
+        }
+    }
+    # res = es.search(index='research_portal_default_shards', body=doc)
+    res = es.search(index='research_portal', body=doc)
+    return json.dumps(res)
+
+
 
 
 if __name__ == '__main__':
