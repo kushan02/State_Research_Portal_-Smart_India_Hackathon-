@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request
 from flask import current_app as app
 from flask_cors import CORS, cross_origin
+from flask import jsonify
 
 import flask_bcrypt
 import pymysql
@@ -25,11 +26,11 @@ def login_user():
         elif not password:
             return 'Password field empty', 400
 
-        db = pymysql.connect("156.67.222.22", "u133349638_sih_team", "?/lL@YA$", "u133349638_researchportal")
+        db = pymysql.connect("sql284.main-hosting.eu", "u133349638_sih_team", "?/lL@YA$", "u133349638_researchportal")
         cursor = db.cursor()
 
         params = [user_email]
-        cursor.execute("SELECT user_email, user_password, user_name FROM account WHERE user_email=%s", params)
+        cursor.execute("SELECT user_email, user_password, user_name, user_id FROM account WHERE user_email=%s", params)
 
         db_pass = cursor.fetchone()
 
@@ -38,7 +39,8 @@ def login_user():
 
         try:
             if db_pass is not None and db_pass[1] and bool(flask_bcrypt.check_password_hash(db_pass[1], password)):
-                return db_pass[2], 200
+                details = {"user_name": db_pass[2], "user_id": db_pass[3]}
+                return jsonify(details), 200
             else:
                 return 'Invalid Credentials', 401
         except:
