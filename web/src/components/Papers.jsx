@@ -4,17 +4,19 @@ import Footer from "./footer/Footer.jsx";
 import "./Papers.css";
 import constants from "../constants";
 import axios from "axios";
-import {Button, Card, Col, Layout, Menu, Row, Table, Tag} from "antd";
+import {Tag, Table, Button, Row, Col} from "antd";
+import {Card} from "antd";
+import {Layout, Menu, Breadcrumb} from 'antd';
 // import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
+const {SubMenu} = Menu;
+const {Header, Content, Sider} = Layout;
 
- const columns = [
-  {
-    title: 'Paper Title',
-    dataIndex: 'papers',
-    filters: [
+const columns = [
+    {
+        title: 'Paper Title',
+        dataIndex: 'papers',
+        filters: [
       {
         text: 'Joe',
         value: 'Joe',
@@ -44,29 +46,11 @@ const { Header, Content, Sider } = Layout;
 
  const data1 = [
   {
-    key: '1',
-    papers: 'John Brown',
-    citations: 32,
-    year: 2019,
-  },
-  {
-    key: '2',
-    papers: 'Jim Green',
-    citations: 42,
-    year: 2001,
-  },
-  {
-    key: '3',
-    papers: 'Joe Black',
-    citations: 32,
-    year: 2004,
-  },
-  {
-    key: '4',
-    papers: 'Jim Red',
-    citations: 32,
-    year: 2017,
-  },
+      key: '1',
+      papers: 'Text Extraction from Book Cover Using MSER',
+      citations: 7,
+      year: 2019,
+  }
 ];
 
 function onChange(pagination, filters, sorter, extra) {
@@ -109,63 +93,52 @@ export class Papers extends Component {
                 width:'25%',
                 height:'57px'
             }}>
-              <div style={{
-                    width:'25%',
-              }}>
-                  <Card title="Author Details" style={{
-                      width: 260,
-                      height: '70vh',
-                      border: '1px solid rgb(207, 207, 207)',
-                      borderRadius: '5px'
-                  }}>
-                      <p>Charotar University of Science and Technology </p>
-                      Department of Computer Science and Engineering Anand, India
-                      <br/><br/>
-                      <p><h4>Current position</h4></p>
-                      Student, Devang Patel Institute of Advance Technology , CSE
-                      <img style={{marginLeft: "40px", marginTop: '40px'}} width={"60%"} src={require("./logo.jpg")}
-                           alt="Flowers in Chania"/>
-                  </Card>
-              </div>
+                <div style={{
+                    width: '25%',
+                }}>
+                    <Card title="Author Details" style={{width: 260, height: '70vh', borderRadius: '5px'}}>
+                        <p>Charotar University of Science and Technology </p>
+                        Department of Computer Science and Engineering, Gujarat, India
+                        <br/><br/>
+                        <p><h4>Current position</h4></p>
+                        Student, Devang Patel Institute of Advance Technology , CSE
+                    </Card>
+                </div>
             </div>
 
             <div className="profile-main-outer-div" style={{
-                marginTop:'-57px'
+                marginTop: '-57px'
             }}>
                 <div className="papers-inner-div">
-                    <h1>Mitanshu Bhatt<Button ghost size="large" type="primary" id="contact-button">Contact</Button>
-                    </h1>
-                    Charotar University of Science and Technology | DEPSTAR · Department of Computer Science and
-                    Engineering
+                    <h1>Kushan Mehta<Button size="large" id="contact-button">Contact</Button></h1>
+                    Charotar University of Science and Technology | CHARUSAT
                     <br/>
-                    Pursuing B.Tech in Computer Science and Engineering
+                    BTech - Computer Science & Engineering
                     <br/><br/>
                     <h3>Skills</h3>
-                    <Tag color="geekblue" style={{padding: '2.8px', borderRadius: '7px'}}>Data Analytics</Tag>
-                    <Tag color="geekblue" style={{padding: '2.8px', borderRadius: '7px'}}>Web Development</Tag>
-                    <Tag color="geekblue" style={{padding: '2.8px', borderRadius: '7px'}}>Cyber Security</Tag>
-                    <Tag color="geekblue" style={{padding: '2.8px', borderRadius: '7px'}}>Theory of Computation</Tag>
-                    <Tag color="geekblue" style={{padding: '2.8px', borderRadius: '7px'}}>Compiler Design</Tag>
-                    <Tag color="geekblue" style={{padding: '2.8px', borderRadius: '7px'}}>Assembly Programming</Tag>
+                    <Tag style={{padding: '3px', borderRadius: '7px'}}>Data Analytics</Tag>
+                    <Tag style={{padding: '3px', borderRadius: '7px'}}>Machine Learning</Tag>
+                    <Tag style={{padding: '3px', borderRadius: '7px'}}>Data Mining</Tag>
+
 
                 </div>
 
-          </div>
+            </div>
 
 
             <div className="profile-main-outer-div">
               <div className="papers-inner-div">
-                      <Row  className="summary-row" justify="space-between">
-                            <Col span={8}><h3>101</h3> </Col>
-                            <Col span={8}><h3>27,695</h3> </Col>
-                            <Col span={8}><h3>772</h3> </Col>
-                      </Row>
-                      <Row  className="summary-row" justify="space-between">
+                  <Row className="summary-row" justify="space-between">
+                      <Col span={8}><h3>1</h3></Col>
+                      <Col span={8}><h3>1,276</h3></Col>
+                      <Col span={8}><h3>7</h3></Col>
+                  </Row>
+                  <Row className="summary-row" justify="space-between">
 
-                            <Col span={8}>Publications</Col>
-                            <Col span={8}>Reads</Col>
-                            <Col span={8}>Citations</Col>
-                      </Row>
+                      <Col span={8}>Publications</Col>
+                      <Col span={8}>Reads</Col>
+                      <Col span={8}>Citations</Col>
+                  </Row>
               </div>
           </div>
         <div className="papers-outer-div">
