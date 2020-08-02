@@ -10,18 +10,10 @@ import "antd/dist/antd.css";
 import {message} from 'antd';
 
 import {
-    Form,
-    Input,
-    Tooltip,
-    Icon,
-    Cascader,
-    Select,
-    Row,
-    Col,
-    Checkbox,
-    Button,
-    AutoComplete
+    Form, Input, Tooltip, Icon, Select, Checkbox, Button, AutoComplete
 } from "antd";
+
+import constants from "../../constants";
 
 const {Option} = Select;
 const {TextArea} = Input;
@@ -31,57 +23,34 @@ class RegistrationForm extends React.Component {
     state = {
         confirmDirty: false,
         autoCompleteResult: []
-        // fname: "",
-        // email: "",
-        // password: "",
-        // institute: "",
-        // city: "",
-        // phone_number: "",
-        // bio: "",
-        // hp: ""
     };
 
     handleSubmit = e => {
         e.preventDefault();
-        // const {
-        //   fname,
-        //   password,
-        //   cpass,
-        //   email,
-        //   institute,
-        //   city,
-        //   phone_number,
-        //   bio,
-        //   hp
-        // } = this.state;
 
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                axios
-                    .post(`http://127.0.0.1:5000/api/registration/`, {
-                        fname: values.name,
-                        password: values.password,
-                        email: values.email,
-                        institute: values.institute,
-                        city: values.city,
-                        phone_number: values.phone || "",
-                        bio: values.bio || "",
-                        hp: values.homepage || "",
-
-                    })
-                    .then(res => {
-                        message.success(res.data);
-                        console.log(res);
-                        console.log(res.data);
-                    })
-                    .catch(function (error) {
-                        if (error.response) {
-                            message.error(error.response.data);
-                            console.log(error.response.data);
-                            console.log(error.response.status);
-                            console.log(error.response.headers);
-                        }
-                    });
+                axios.post(constants.flaskServerUrl + "registration/", {
+                    fname: values.name,
+                    password: values.password,
+                    email: values.email,
+                    institute: values.institute,
+                    city: values.city,
+                    phone_number: values.phone || "",
+                    bio: values.bio || "",
+                    hp: values.homepage || ""
+                }).then(res => {
+                    message.success(res.data);
+                    console.log(res);
+                    console.log(res.data);
+                }).catch(function (error) {
+                    if (error.response) {
+                        message.error(error.response.data);
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    }
+                });
                 console.log("Received values of form: ", values);
             }
         });
@@ -95,7 +64,7 @@ class RegistrationForm extends React.Component {
     compareToFirstPassword = (rule, value, callback) => {
         const {form} = this.props;
         if (value && value !== form.getFieldValue("password")) {
-            callback("Passwords donot match, try again!");
+            callback("Passwords do not match, try again!");
         } else {
             callback();
         }
@@ -116,22 +85,8 @@ class RegistrationForm extends React.Component {
     render() {
         const {getFieldDecorator} = this.props.form;
         const {autoCompleteResult} = this.state;
-        // const {
-        //   fname,
-        //   password,
-        //   cpass,
-        //   email,
-        //   institute,
-        //   city,
-        //   phone_number,
-        //   bio,
-        //   hp
-        // } = this.state;
 
-
-        const prefixSelector = getFieldDecorator("prefix", {
-            initialValue: "91"
-        })(
+        const prefixSelector = getFieldDecorator("prefix", {initialValue: "91"})(
             <Select style={{width: 70}}>
                 <Option value="91">+91</Option>
             </Select>
@@ -139,85 +94,67 @@ class RegistrationForm extends React.Component {
 
         return (
             <React.Fragment>
-                <div className="navbar-outer-div">
-                    <NavBar/>
-                </div>
+                <div className="navbar-outer-div"><NavBar/></div>
+
                 <div style={{paddingTop: "90px"}}></div>
 
                 <div className="registration-container">
+
                     <h1 className="registration-title">Create your account</h1>
 
                     <Form onSubmit={this.handleSubmit}>
-                        <Form.Item
-                            label={
-                                <span>
-                  Name&nbsp;
-                                    <Tooltip title="Full Name as it appears on your research papers">
-                    <Icon type="question-circle-o"/>
-                  </Tooltip>
-                </span>
-                            }
-                        >
-                            {getFieldDecorator("name", {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: "Please input your Full Name.",
-                                        whitespace: true
-                                    }
-                                ]
+
+                        <Form.Item label={
+                            <span>
+                                Name
+                                <Tooltip title="Full Name as it appears on your research papers">
+                                    <Icon type="question-circle-o"/>
+                                </Tooltip>
+                            </span>
+                        }>{
+                            getFieldDecorator("name", {
+                                rules: [{
+                                    required: true,
+                                    message: "Please input your Full Name.",
+                                    whitespace: true
+                                }]
                             })(
-                                <Input
-                                    placeholder="Enter your full name"
-                                    name="fname"
-                                    //   value={fname}
-                                    //   onChange={this.onChange}
-                                />
-                            )}
+                                <Input placeholder="Enter your full name" name="fname"/>
+                            )
+                        }
                         </Form.Item>
-                        <Form.Item label="E-mail">
-                            {getFieldDecorator("email", {
-                                rules: [
-                                    {
-                                        type: "email",
-                                        message: "The input is not valid E-mail!"
-                                    },
-                                    {
-                                        required: true,
-                                        message: "Please input your E-mail Address"
-                                    }
-                                ]
+
+                        <Form.Item label="E-mail">{
+                            getFieldDecorator("email", {
+                                rules: [{
+                                    type: "email",
+                                    message: "Please enter a valid email address"
+                                }, {
+                                    required: true,
+                                    message: "Please input your email address"
+                                }]
                             })(
-                                <Input
-                                    placeholder="Enter your Email Address"
-                                    name="email"
-                                    //   value={email}
-                                    //   onChange={this.onChange}
-                                />
-                            )}
+                                <Input placeholder="Enter your Email Address" name="email"/>
+                            )
+                        }
                         </Form.Item>
-                        <Form.Item label="Password" hasFeedback>
-                            {getFieldDecorator("password", {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: "Please input your password!"
-                                    },
-                                    {
-                                        validator: this.validateToNextPassword
-                                    }
-                                ]
+
+                        <Form.Item label="Password" hasFeedback>{
+                            getFieldDecorator("password", {
+                                rules: [{
+                                    required: true,
+                                    message: "Please input your password!"
+                                }, {
+                                    validator: this.validateToNextPassword
+                                }]
                             })(
-                                <Input.Password
-                                    placeholder="Enter your password"
-                                    name="password"
-                                    //   value={password}
-                                    //   onChange={this.onChange}
-                                />
-                            )}
+                                <Input.Password placeholder="Enter your password" name="password"/>
+                            )
+                        }
                         </Form.Item>
-                        <Form.Item label="Confirm Password" hasFeedback>
-                            {getFieldDecorator("confirm", {
+
+                        <Form.Item label="Confirm Password" hasFeedback>{
+                            getFieldDecorator("confirm", {
                                 rules: [
                                     {
                                         required: true,
@@ -228,25 +165,21 @@ class RegistrationForm extends React.Component {
                                     }
                                 ]
                             })(
-                                <Input.Password
-                                    onBlur={this.handleConfirmBlur}
-                                    placeholder="Confirm your Password"
-                                    name="cpass"
-
-                                />
-                            )}
+                                <Input.Password onBlur={this.handleConfirmBlur} placeholder="Confirm your Password"
+                                                name="cpass"/>
+                            )
+                        }
                         </Form.Item>
-                        <Form.Item
-                            label={
-                                <span>
-                  Institute&nbsp;
-                                    <Tooltip title="E.g., DEPSTAR, Charusat University">
-                    <Icon type="question-circle-o"/>
-                  </Tooltip>
-                </span>
-                            }
-                        >
-                            {getFieldDecorator("institute", {
+
+                        <Form.Item label={
+                            <span>
+                                Institute / Affiliation
+                                    <Tooltip title="E.g., Anna University, PES University etc">
+                                        <Icon type="question-circle-o"/>
+                                    </Tooltip>
+                            </span>
+                        }>{
+                            getFieldDecorator("institute", {
                                 rules: [
                                     {
                                         required: true,
@@ -255,13 +188,9 @@ class RegistrationForm extends React.Component {
                                     }
                                 ]
                             })(
-                                <Input
-                                    placeholder="Provide your Institute Name"
-                                    name="institute"
-                                    //   value={institute}
-                                    //   onChange={this.onChange}
-                                />
-                            )}
+                                <Input placeholder="Provide your Institute Name" name="institute"/>
+                            )
+                        }
                         </Form.Item>
 
                         {/*Area of Interest*/}
@@ -283,8 +212,8 @@ class RegistrationForm extends React.Component {
           </Select>)}
           </Form.Item> */}
 
-                        <Form.Item label="City">
-                            {getFieldDecorator("city", {
+                        <Form.Item label="City">{
+                            getFieldDecorator("city", {
                                 rules: [
                                     {
                                         required: true,
@@ -293,62 +222,37 @@ class RegistrationForm extends React.Component {
                                     }
                                 ]
                             })(
-                                <Input
-                                    placeholder="Enter your city"
-                                    name="city"
-                                    //   value={city}
-                                    //   onChange={this.onChange}
-                                />
-                            )}
+                                <Input placeholder="Enter your city" name="city"/>
+                            )
+                        }
                         </Form.Item>
 
                         <Form.Item label={
                             <span>
-                  Home Page&nbsp;
-                                <Tooltip title="E.g., http://xyz.abc or https://xyz.abc">
-                    <Icon type="question-circle-o"/>
-                  </Tooltip>
-                </span>
-                        }>
-                            {getFieldDecorator("homepage", {
+                                Home Page
+                                    <Tooltip title="E.g., http://xyz.abc or https://xyz.abc">
+                                        <Icon type="question-circle-o"/>
+                                    </Tooltip>
+                            </span>
+                        }>{
+                            getFieldDecorator("homepage", {
                                 rules: [
                                     {required: false, message: "Please enter your Website"},
                                     {
-                                        // type: new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi),
                                         pattern: /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi,
                                         message: "Please enter a valid URL",
                                         whitespace: false
                                     }
                                 ]
                             })(
-                                <Input
-                                    placeholder="Enter your Website"
-                                    name="hp"
-                                    //   value={hp}
-                                    //   onChange={this.onChange}
-                                />
-                            )}
+                                <Input placeholder="Enter your Website" name="hp"/>
+                            )
+                        }
                         </Form.Item>
 
-                        <Form.Item size="large" label="Bio">
-                            {getFieldDecorator("bio", {
-                                rules: [
-                                    {required: false, message: "Please enter your Bio"},
-                                ]
-                            })(
-                                <TextArea
-                                    placeholder="Write a short bio about yourself"
-                                    allowClear
-                                    onChange={this.onChange}
-                                    // name="bio"
-                                    // value={bio}
-                                />
-                            )}
 
-                        </Form.Item>
-
-                        <Form.Item label="Phone Number">
-                            {getFieldDecorator("phone", {
+                        <Form.Item label="Phone Number">{
+                            getFieldDecorator("phone", {
                                 rules: [
                                     {
                                         required: false,
@@ -364,49 +268,28 @@ class RegistrationForm extends React.Component {
                                     }
                                 ]
                             })(
-                                <Input
-                                    placeholder=""
-                                    addonBefore={prefixSelector}
-                                    style={{width: "100%"}}
-                                    name="phone_number"
-                                    //   value={phone_number}
-                                    //   onChange={this.onChange}
-                                />
-                            )}
+                                <Input placeholder="Enter your phone number" addonBefore={prefixSelector}
+                                       style={{width: "100%"}} name="phone_number"/>
+                            )
+                        }
                         </Form.Item>
-                        {/* <Form.Item label="Captcha" extra="We must make sure that your are a human.">
-            <Row gutter={8}>
-              <Col span={12}>
-                {getFieldDecorator('captcha', {
-                  rules: [{ required: true, message: 'Please input the captcha you got!' }],
-                })(<Input />)}
-              </Col>
-              <Col span={12}>
-                <Button>Get captcha</Button>
-              </Col>
-            </Row>
-          </Form.Item> */}
-                        <Form.Item>
-                            {getFieldDecorator("agreement", {
-                                valuePropName: "checked"
-                            })(
-                                <Checkbox>
-                                    I agree with <a href="#">Terms & Conditions</a>
-                                </Checkbox>
-                            )}
-                        </Form.Item>
-                        <Form.Item
-                            className="registration-register-button"
-                        >
-                            <Button type="primary" htmlType="submit">
+
+
+                        <Form.Item className="registration-register-button">
+
+                            <Button className="registration-button" block type="primary"
+                                    htmlType="submit">
                                 Register
                             </Button>
+
+                            <p disabled> By creating an account, you agree to the Terms of Service.</p>
                         </Form.Item>
+
                     </Form>
-                    {/* <div className="home-footer"> */}
-                    {/* </div> */}
                 </div>
+
                 <Footer/>
+
             </React.Fragment>
         );
     }

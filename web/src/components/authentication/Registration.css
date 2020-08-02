@@ -23,7 +23,15 @@
 }
 
 .registration-register-button {
-    margin-left: 10%;
+    text-align: center;
+}
+
+.registration-button {
+    height: 2.8em;
+}
+
+.anticon {
+    margin-left: 3px;
 }
 
 @media screen and (max-width: 800px) {

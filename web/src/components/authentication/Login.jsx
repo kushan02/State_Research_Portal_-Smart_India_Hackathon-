@@ -94,11 +94,23 @@ class NormalLoginForm extends React.Component {
         });
     };
 
+    responseGoogle = (response) => {
+        console.log(response);
+        message.success("Login via Google successful", 3);
+        let user_name = response["profileObj"]["name"];
+        let user_email = response["profileObj"]["email"];
+        let data = {"user_name": user_name, "user_email": user_email, "profile_completed": false};
+        localStorage.setItem('google-oauth-data', JSON.stringify(data));
+
+        setTimeout(() => {
+            this.props.history.push("/registration");
+            message.info("Please complete your profile to access all the features of the site", 7);
+        }, 3000);
+    };
+
     render() {
         const {getFieldDecorator} = this.props.form;
-        const responseGoogle = (response) => {
-            console.log(response);
-        };
+
 
         return (
             <React.Fragment>
@@ -139,10 +151,10 @@ class NormalLoginForm extends React.Component {
 
                     <div style={{width: "100%"}}>
                         <GoogleLogin
-                            clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+                            clientId={constants.google_oauth_client_id}
                             buttonText="Login With Google"
-                            onSuccess={responseGoogle}
-                            onFailure={responseGoogle}
+                            onSuccess={this.responseGoogle}
+                            onFailure={this.responseGoogle}
                             cookiePolicy={"single_host_origin"}
                             style={{width: "100%"}}
                         />
