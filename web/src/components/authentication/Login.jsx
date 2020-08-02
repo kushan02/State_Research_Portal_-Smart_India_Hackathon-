@@ -70,7 +70,9 @@ class NormalLoginForm extends React.Component {
                         // localStorage.setItem('login-data', JSON.stringify(res.config.data));
                         localStorage.setItem("login-data", true);
                         localStorage.setItem("user_email", values.email);
-                        localStorage.setItem("user_name", res.data);
+                        localStorage.setItem("user_name", res.data.user_name);
+                        localStorage.setItem("user_id", res.data.user_id);
+
                         setTimeout(() => {
                             this.props.history.push("/");
                         }, 1000);
@@ -127,7 +129,9 @@ class NormalLoginForm extends React.Component {
             localStorage.setItem("user_name", user_name);
 
             setTimeout(() => {
-                this.props.history.push("/registration");
+                // this.props.history.push("/registration");
+                this.props.history.push("/");
+
                 message.success("Login via Google successful", 3);
                 message.info("Please complete your profile to access all the features of the site", 7);
             }, 3000);
