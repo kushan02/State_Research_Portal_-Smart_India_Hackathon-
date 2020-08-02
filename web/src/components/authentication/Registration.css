@@ -10,6 +10,7 @@
     /* text-align: center; */
     min-width: 400px;
     max-width: 550px;
+    padding-bottom: 0px;
 }
 
 .registration-container .ant-form-item-label {
