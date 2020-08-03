@@ -53,6 +53,21 @@
     margin: auto;
 
 }
+.papers-inner-div-1{
+    /* background-color: red; */
+    width: 90%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+
+}
+.papers-inner-left-div{
+    flex:1
+}
+.papers-inner-right-div{
+    flex:1
+
+}
 .papers-outer-div a{
     color :#237aaa;
 }

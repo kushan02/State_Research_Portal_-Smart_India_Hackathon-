@@ -446,7 +446,7 @@ class SearchResult extends Component {
                                                         key={item.id}
                                                     >
                                                         <ResultList key={item._id}>
-                                                            {/* {console.log(item)} */}
+                                                            {console.log(item)}
                                                             <div className="search-result">
                                                                 <div className="search-result-title">
                                                                     <a href={"/paper-details/" + item._id}>
