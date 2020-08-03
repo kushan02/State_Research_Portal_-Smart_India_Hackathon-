@@ -218,7 +218,7 @@ class SearchResult extends Component {
                                         })}
                                         rangeLabels={(min, max) => ({
                                             start: min,
-                                            end: max
+                                            end: 2020
                                         })}
                                         onValueChange={function (value) {
                                             // console.log("current value: ", value);

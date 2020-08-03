@@ -1,22 +1,77 @@
-import React, { Component } from "react";
-import { Steps, Button, Form, message, Divider, Table } from "antd";
+import React, {Component} from "react";
+import {Steps, Button, Form, message, Divider, Table, Row} from "antd";
 import constants from "../../constants";
 import axios from "axios";
 import NavBar from "../navbar/NavBar.jsx";
 import Footer from "../footer/Footer";
 import "./LinkPaper.css";
 
+// const columns = [
+//   {
+//     title: "Title",
+//     dataIndex: "title",
+//     render: (text) => text,
+//   },
+//   {
+//     title: "year",
+//     dataIndex: "year",
+//   },
+// ];
+
 const columns = [
-  {
-    title: "Title",
-    dataIndex: "title",
-    render: (text) => text,
-  },
-  {
-    title: "year",
-    dataIndex: "year",
-  },
+    {
+        title: "Publications",
+        dataIndex: "title",
+        render: (text, record) => (
+            <Row>
+                <p className="search-result-title"><a href={"http://localhost:3000/paper-details/" + record.id}><span
+                    style={{fontSize: "16px"}}> {text}</span></a></p>
+                {/*{console.log(record.authors)}*/}
+                {record.authors.map(
+                    (author, index) => {
+                        return <span className="search-result-author">{(index ? ', ' : '') + author.name.trim()}</span>
+                    }
+                )}
+
+                {/*<p style={{marginTop: "10px"}}>{record.authors.name}</p>*/}
+                <p className="search-result-journal-name">{record.journalName}</p>
+            </Row>
+        ),
+        //   sorter: {
+        //   compare: (a, b) => a.title - b.title,
+        //   multiple: 3,
+        // },
+    },
+    {
+        title: "Citations",
+        dataIndex: "citationCount",
+        render: (text) => (
+            <Row>
+                <p style={{textAlign: "center"}}>{text}</p>
+            </Row>
+        ),
+        //   sorter: {
+        //   compare: (a, b) => a.citationCount - b.citationCount,
+        //   multiple: 2,
+        // },
+    },
+    {
+        title: "Year",
+        dataIndex: "year",
+        defaultSortOrder: 'descend',
+
+        render: (text) => (
+            <Row>
+                <p style={{textAlign: "center"}}>{text}</p>
+            </Row>
+        ),
+        // sorter: {
+        // compare: (a, b) => parseInt(a.year) - parseInt(b.year),
+        // multiple: 1,
+        // },
+    },
 ];
+
 
 export class LinkPaper extends Component {
   state = {
@@ -77,6 +132,8 @@ export class LinkPaper extends Component {
             "/" +
             localStorage.getItem("user_id")
         );
+        window.scroll({ top: 0, left: 0, behavior: "smooth" });
+
       })
       .catch((error) => {
         this.setState({ linkLoading: false });
@@ -106,19 +163,20 @@ export class LinkPaper extends Component {
         </div>
         <div style={{ paddingTop: "90px" }}></div>
 
-        <div className="login-form step-outer-container link-paper">
-          <h1>Claim your Research Papers</h1>
-          Ensure your research is discoverable on our platform. Claiming your
-          research papers allows you to showcase your research work on your
-          author page. You can select all the papers that belong to you that you
-          want to claim as your work
-          <br />
-          <br />
-          <Table
-            loading={this.state.loading}
-            rowSelection={this.rowSelection}
-            columns={columns}
-            dataSource={this.state.data}
+          <div style={{width: "70%"}} className="login-form step-outer-container link-paper">
+              <h1>Claim your Research Papers</h1>
+              Ensure your research is discoverable on our platform. Claiming your
+              research papers allows you to showcase your research work on your
+              author page. You can select all the papers that belong to you that you
+              want to claim as your work
+              <br/>
+              <br/>
+              <Table
+                  loading={this.state.loading}
+                  rowSelection={this.rowSelection}
+                  columns={columns}
+                  dataSource={this.state.data}
+                  bordered={true}
           />
           <div style={{ display: "flex", justifyContent: "center" }}>
             <Button

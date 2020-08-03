@@ -1,246 +1,220 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import NavBar from "./navbar/NavBar.jsx";
 import Footer from "./footer/Footer.jsx";
 import "./Papers.css";
 import constants from "../constants";
 import axios from "axios";
-import { Tag, Table, Button, Row, Col } from "antd";
-import { Card } from "antd";
-import { Layout, Menu, Breadcrumb, Icon } from "antd";
+import {Tag, Table, Button, Row, Col} from "antd";
+import {Card} from "antd";
+import {Layout, Menu, Breadcrumb, Icon} from "antd";
 // import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
+const {SubMenu} = Menu;
+const {Header, Content, Sider} = Layout;
+
 function IsJsonString(str) {
-  try {
-    JSON.parse(str);
-  } catch (e) {
-    return false;
-  }
-  return true;
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
 }
 
 const columns = [
-  {
-    title: "Paper Title",
-    dataIndex: "title",
-  },
-  {
-    title: "Citations",
-    dataIndex: "citationCount",
-  },
-  {
-    title: "Year",
-    dataIndex: "year",
-  },
+    {
+        title: "Publications",
+        dataIndex: "title",
+        render: (text, record) => (
+            <Row>
+                <p className="search-result-title"><a href={"http://localhost:3000/paper-details/" + record.id}><span
+                    style={{fontSize: "16px"}}> {text}</span></a></p>
+                {/*{console.log(record.authors)}*/}
+                {record.authors.map(
+                    (author, index) => {
+                        return <span className="search-result-author">{(index ? ', ' : '') + author.name.trim()}</span>
+                    }
+                )}
+
+                {/*<p style={{marginTop: "10px"}}>{record.authors.name}</p>*/}
+                <p className="search-result-journal-name">{record.journalName}</p>
+            </Row>
+        )
+    },
+    {
+        title: "Citations",
+        dataIndex: "citationCount",
+        render: (text) => (
+            <Row>
+                <p style={{textAlign: "center"}}>{text}</p>
+            </Row>
+        )
+    },
+    {
+        title: "Year",
+        dataIndex: "year",
+        render: (text) => (
+            <Row>
+                <p style={{textAlign: "center"}}>{text}</p>
+            </Row>
+        )
+    },
 ];
 
-function onChange(pagination, filters, sorter, extra) {
-  // console.log('params', pagination, filters, sorter, extra);
-}
+
 export class Papers extends Component {
-  state = {
-    data: [],
-    authorData: {},
-    paperLoading: false,
-  };
-  loadData = () => {
-    this.setState({ loading: true });
-    axios
-      .post(constants.flaskServerUrl + "account/details", {
-        user_email: localStorage.getItem("user_email") || "",
-      })
-      .then((res) => {
-        console.log(res.data);
-        this.setState({ authorData: res.data });
-      })
-      .catch((error) => {
-        // console.log(error);
-      });
-  };
-  componentDidMount() {
-    this.loadData();
-    this.setState({ paperLoading: true });
+    state = {
+        data: [],
+        authorData: {},
+        paperLoading: false,
+    };
+    loadData = () => {
+        this.setState({loading: true});
+        axios
+            .post(constants.flaskServerUrl + "account/details", {
+                user_email: localStorage.getItem("user_email") || "",
+            })
+            .then((res) => {
+                console.log(res.data);
+                this.setState({authorData: res.data});
+            })
+            .catch((error) => {
+                // console.log(error);
+            });
+    };
 
-    axios
-      .get(
-        constants.flaskServerUrl +
-          "papers/author/id/" +
-          localStorage.getItem("user_id")
-      )
-      .then((res) => {
-        this.setState({ paperLoading: false });
-        // console.log(res.data.map(i=>i._source));
-        this.setState({ data: res.data.map((i) => i._source) });
-        // console.log(
-        //   res.data.map((i) => i._source.citationCount).reduce((x, y) => x + y)
-        // );
-      })
-      .catch((err) => {
-        this.setState({ paperLoading: false });
+    componentDidMount() {
+        this.loadData();
+        this.setState({paperLoading: true});
 
-        console.error(err);
-      });
-  }
+        axios
+            .get(
+                constants.flaskServerUrl +
+                "papers/author/id/" +
+                localStorage.getItem("user_id")
+            )
+            .then((res) => {
+                this.setState({paperLoading: false});
+                // console.log(res.data.map(i=>i._source));
+                this.setState({data: res.data.map((i) => i._source)});
+                // console.log(
+                //   res.data.map((i) => i._source.citationCount).reduce((x, y) => x + y)
+                // );
+            })
+            .catch((err) => {
+                this.setState({paperLoading: false});
 
-  render() {
-    let interestArr = IsJsonString(this.state.authorData.user_interests)
-      ? JSON.parse(this.state.authorData.user_interests).interests
-      : [];
-    console.log(interestArr);
-    return (
-      <React.Fragment>
-        <div className="navbar-outer-div">
-          <NavBar />
-          <br />
-        </div>
+                console.error(err);
+            });
+    }
 
-        <div
-          style={{
-            paddingTop: "90px",
-            width: "80%",
-            marginRight: "auto",
-            marginLeft: "auto",
-          }}
-        >
-          {/*         <div style={{
-                marginLeft:'98%',
-                width:'25%',
-                height:'57px'
-            }}>
-                <div style={{
-                    width: '25%',
-                }}>
-                    <Card title="Author Details" style={{width: 260, height: '70vh', borderRadius: '5px'}}>
-                        <p>Charotar University of Science and Technology </p>
-                        Department of Computer Science and Engineering, Gujarat, India
-                        <br/><br/>
-                        <p><h4>Current position</h4></p>
-                        Student, Devang Patel Institute of Advance Technology , CSE
-                    </Card>
+    render() {
+        let interestArr = IsJsonString(this.state.authorData.user_interests)
+            ? JSON.parse(this.state.authorData.user_interests).interests
+            : [];
+        console.log(interestArr);
+        return (
+            <React.Fragment>
+                <div className="navbar-outer-div">
+                    <NavBar/>
+                    <br/>
                 </div>
-            </div>*/}
 
-          <div
-            className="profile-main-outer-div"
-            style={
-              {
-                // marginTop: '-57px'
-              }
-            }
-          >
-            <div className="papers-inner-div-1">
-              <div className="papers-inner-left-div">
-                <h1>
-                  {localStorage.getItem("user_name")}
-                  {/* <Button size="large" id="contact-button">
-                  Contact
-                </Button> */}
-                </h1>
-                {/* Charotar University of Science and Technology | CHARUSAT */}
-                {localStorage.getItem("user_institute")}
 
-                <br />
-                <br />
-                {/* BTech - Computer Science & Engineering */}
-              
-                {interestArr.length != 0 && <h3>Interests</h3>}
+                <Row style={{paddingTop: "90px", color: "#264653"}}>
+                    <Col style={{paddingLeft: "60px"}} span={7}>
+                        <div className="profile-main-outer-div">
+                            <div style={{padding: "15px", marginLeft: "auto", marginRight: "auto"}}>
+                                <div style={{textAlign: "center"}}>
+                                    <h1> {localStorage.getItem("user_name")} </h1>
 
-                {interestArr.length != 0 &&
-                  interestArr.map((i) => {
-                    return (
-                      <Tag style={{ padding: "3px", borderRadius: "7px" }}>
-                        {i}
-                      </Tag>
-                    );
-                  })}
-                {/* <Tag style={{ padding: "3px", borderRadius: "7px" }}>
-                  Data Analytics
-                </Tag>
-                <Tag style={{ padding: "3px", borderRadius: "7px" }}>
-                  Machine Learning
-                </Tag>
-                <Tag style={{ padding: "3px", borderRadius: "7px" }}>
-                  Data Mining
-                </Tag> */}
-              </div>
+                                    <h3 style={{
+                                        marginTop: "-7px",
+                                        marginBottom: "15px"
+                                    }}>{localStorage.getItem("user_institute")}</h3>
 
-              <div className="papers-inner-right-div">
-                <Row className="summary-row" justify="space-between">
-                  <Col span={12}>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <Icon
-                        type="file-text"
-                        style={{
-                          fontSize: "25px",
-                          marginRight: "8px",
-                          paddingBottom: "5px",
-                        }}
-                      />
-                      <h3>{this.state.data.length}</h3>
-                    </div>
-                  </Col>
-                  {/* <Col span={8}>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <Icon
-                        type="read"
-                        style={{
-                          fontSize: "25px",
-                          marginRight: "8px",
-                          paddingBottom: "5px",
-                        }}
-                      />
-                      <h3>1,276</h3>
-                    </div>
-                  </Col> */}
-                  <Col span={12}>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <Icon
-                        type="bar-chart"
-                        style={{
-                          fontSize: "25px",
-                          marginRight: "8px",
-                          paddingBottom: "5px",
-                        }}
-                      />
-                      <h3>
-                        {this.state.data.length == 0
-                          ? "0"
-                          : this.state.data
-                              .map((i) => i.citationCount)
-                              .reduce((x, y) => x + y)}
-                      </h3>
-                    </div>
-                  </Col>
+
+                                    {interestArr.length != 0 &&
+                                    interestArr.map((i) => {
+                                        return (
+                                            <Tag style={{padding: "5px", borderRadius: "3px", marginBottom: "5px"}}>
+                                                <a href={"http://localhost:3000/papers/?search=" + i}>{i}</a>
+                                            </Tag>
+                                        );
+                                    })}
+
+                                </div>
+
+                                {/*<div className="papers-inner-right-div">*/}
+                                <div style={{marginTop: "15px"}}>
+                                    <Row className="summary-row" justify="space-between">
+                                        <Col span={24}>
+                                            <div style={{display: "flex", alignItems: "center"}}>
+                                                <Icon
+                                                    type="bar-chart"
+                                                    style={{
+                                                        fontSize: "25px",
+                                                        marginRight: "8px",
+                                                        paddingBottom: "5px",
+                                                    }}
+                                                />
+                                                <h4>
+                                                    Publications:
+                                                    {
+                                                        this.state.data.length == 0 ? " 0" : " " + this.state.data
+                                                            .map((i) => i.citationCount)
+                                                            .reduce((x, y) => x + y)
+                                                    }
+                                                </h4>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row style={{marginTop: "5px"}} className="summary-row" justify="space-between">
+                                        <Col span={24}>
+                                            <div style={{display: "flex", alignItems: "center"}}>
+                                                <Icon
+                                                    type="read"
+                                                    style={{
+                                                        fontSize: "25px",
+                                                        marginRight: "8px",
+                                                        paddingBottom: "5px",
+                                                    }}
+                                                />
+                                                <h4>
+                                                    Citations: 1,276</h4>
+                                            </div>
+                                        </Col>
+                                    </Row>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </Col>
+
+                    <Col span={17}>
+
+                        <div style={{width: "95%", marginLeft: "auto", marginRight: "auto", paddingRight: "60px"}}>
+                            {/*<h1>Publications</h1>*/}
+                            <Table
+                                columns={columns}
+                                dataSource={this.state.data}
+                                loading={this.state.paperLoading}
+                                bordered={true}
+                            />
+
+                        </div>
+                    </Col>
+
+
                 </Row>
-                <Row className="summary-row" justify="space-between">
-                  <Col span={12}>Publications</Col>
-                  {/* <Col span={8}>Reads</Col> */}
-                  <Col span={12}>Citations</Col>
-                </Row>
-              </div>
-            </div>
-          </div>
 
-          {/* <div className="profile-main-outer-div">
-            <div className="papers-inner-div"></div>
-          </div> */}
-          <div className="papers-outer-div">
-            <div className="papers-inner-div">
-              <h1>Papers</h1>
-              <Table
-                columns={columns}
-                dataSource={this.state.data}
-                loading={this.state.paperLoading}
-              />
-            </div>
-          </div>
-        </div>
 
-        <Footer />
-      </React.Fragment>
-    );
-  }
+                <Footer/>
+            </React.Fragment>
+        );
+    }
 }
 
 export default Papers;

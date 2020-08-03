@@ -41,10 +41,10 @@
     border: 1px solid rgb(207, 207, 207);
     border-radius: 5px;
     /* padding: 20px; */
-    padding-top: 40px;
-    padding-bottom: 40px;
+    /*padding-top: 40px;*/
+    /*padding-bottom: 40px;*/
 
-    margin-bottom: 40px;
+    /*margin-bottom: 40px;*/
 
 }
 .papers-inner-div{
@@ -103,10 +103,65 @@
   margin: 16px;
 }
 
-@media only screen and (max-width:800px) {
-    .papers-inner-div-1{
+@media only screen and (max-width: 800px) {
+    .papers-inner-div-1 {
         /* background-color: red; */
         flex-direction: column;
-    
+
     }
+}
+
+.ant-table-header-column {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.search-result-title {
+    font-size: 20px;
+    margin: 5px;
+    margin-left: 0;
+    /* color: red !important; */
+}
+
+.search-result-title a {
+    color: #1857b6;
+}
+
+.search-result-author {
+    color: #8c9296;
+    font-size: 14px;
+    text-decoration: underline;
+}
+
+.search-result-date {
+    font-size: 14px;
+}
+
+.search-result-abstract {
+    font-size: 14px;
+    margin: 7px;
+    margin-left: 0;
+}
+
+.search-result-citation {
+    color: #dd913f;
+    padding-right: 20px;
+}
+
+.search-result-citation-icon {
+    fill: none;
+    stroke: #dd913f;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2px;
+    width: 15px;
+    margin-right: 5px;
+}
+
+.search-result-journal-name {
+    font-size: 14px;
+    /*text-decoration: underline;*/
+    /*margin-top: 8px;*/
+    /*margin-bottom: 8px;*/
+    color: #8c9296;
 }
