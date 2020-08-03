@@ -71,18 +71,20 @@ class RegistrationForm extends React.Component {
                 }).then(res => {
                     message.success(res.data);
                     this.setState({loading:false})
-                    console.log(res);
-                    console.log(res.data);
+                    // console.log(res);
+                    // console.log(res.data);
                 }).catch((error) =>{
                     if (error.response) {
                         this.setState({ loading: false })
                         // message.error(error.response.data);
-                        console.log(error && error.response);
+                        // console.log(error && error.response);
+                    message.error("Please try again");
+
                         // console.log(error.response.status);
                         // console.log(error.response.headers);
                     }
                 });
-                console.log("Received values of form: ", values);
+                // console.log("Received values of form: ", values);
             } else {
                 window.scroll({ top: 0, left: 0, behavior: 'smooth' });
             }

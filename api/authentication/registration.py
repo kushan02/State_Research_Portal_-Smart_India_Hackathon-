@@ -20,7 +20,6 @@ def register_user():
         if field in ['name', 'email', 'password', 'city', 'institute']:
             # Check if the data field is not empty
             if not data[field]:
-                print("required fields empty")
                 return 'Please fill the required fields!', 400
 
     # phone number validation
@@ -28,28 +27,26 @@ def register_user():
         regex_p_no = re.compile('[6-9][0-9]{9}')
         is_valid_phone = bool(re.match(regex_p_no, data['phone_number']))
         if not is_valid_phone:
-            print("phone number invalid")
             return 'Phone number invalid', 400
 
     # homepage url validation
     if data['homepage']:
         homepage = data['homepage']
         regex_hp = re.compile(
-            # r'^(?:http|ftp)s?://'  # http:// or https://
+            r'^(?:http|ftp)s?://'  # http:// or https://
             r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
+            r'localhost|'  # localhost...
             r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
             r'(?::\d+)?'  # optional port
             r'(?:/?|[/?]\S+)$', re.IGNORECASE)
         is_valid_homepage = bool(re.match(regex_hp, homepage))
         if not is_valid_homepage:
-            print("home page url invalid")
             return 'Homepage URL invalid', 400
 
     # Email Validation
     regex_email = re.compile('^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$')
     is_valid_email = bool(re.match(regex_email, data['email']))
     if not is_valid_email:
-        print("email invalid")
         return 'Email address is invalid', 400
 
         # password validation
@@ -82,8 +79,7 @@ def register_user():
         cursor.close()
         db.close()
         return 'Your account has been successfully created!', 200
-    except Exception as e:
-        print(e)
+    except:
         db.rollback()
         cursor.close()
         db.close()

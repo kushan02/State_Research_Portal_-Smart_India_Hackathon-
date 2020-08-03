@@ -54,7 +54,7 @@ const columns = [
 ];
 
 function onChange(pagination, filters, sorter, extra) {
-  console.log('params', pagination, filters, sorter, extra);
+  // console.log('params', pagination, filters, sorter, extra);
 }
 export class Papers extends Component {
   state = {
@@ -67,7 +67,7 @@ export class Papers extends Component {
       axios
       .get(constants.elasticSearchUrl+  constants.elasticSearchAppName +"/_search?q=deep learning")
       .then(res =>{
-        console.log(res.data.hits.hits);
+        // console.log(res.data.hits.hits);
         this.setState({ data: res.data.hits.hits });
       })
       .catch(err => console.error(err));

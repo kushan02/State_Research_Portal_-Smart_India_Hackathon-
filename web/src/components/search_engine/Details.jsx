@@ -153,7 +153,7 @@ export class Details extends Component {
                       <h2>Fields Of Study</h2>
                       <div style={{ marginLeft: "-5px" }}>
                         {this.state.data.fieldsOfStudy.map((field) => (
-                           <a href={"/search?q=" + field} target="_blank">
+                           <a href={"/papers/?search=" + field} target="_blank">
                           <span className="paper-topic">{field}</span></a>
                         ))}
                       </div>
@@ -164,7 +164,7 @@ export class Details extends Component {
                       <h2>Topics</h2>
                       <div style={{ marginLeft: "-5px" }}>
                         {this.state.paperApiData.topics.map((topic) => (
-                          <a href={"/search?q=" + topic.topic} target="_blank">
+                          <a href={"/papers/?search=" + topic.topic} target="_blank">
                             <span className="paper-topic">{topic.topic}</span>
                           </a>
                         ))}

@@ -14,7 +14,7 @@ const {SubMenu} = Menu;
 
 class Sider extends React.Component {
   handleClick = e => {
-    console.log("click ", e);
+    // console.log("click ", e);
   };
 
   render() {

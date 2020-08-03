@@ -38,7 +38,7 @@ class Home extends Component {
     // console.log(this.props.SearchValue)
   };
   handleKey = (e, triggerQuery) => {
-    console.log(e);
+    // console.log(e);
     if (e.key === "Enter") {
       this.props.history.push("papers/?search=" + this.state.SearchValue);
     }

@@ -42,7 +42,7 @@ const selectAfter = (
 const { TextArea } = Input;
 
 const onChange = (e) => {
-  console.log(e);
+  // console.log(e);
 };
 
 // import 'antd/dist/antd.css';
@@ -74,7 +74,7 @@ class RegistrationForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log("Received values of form: ", values);
+        // console.log("Received values of form: ", values);
       }
     });
   };
@@ -119,12 +119,12 @@ class RegistrationForm extends React.Component {
         user_email: localStorage.getItem("user_email") || "",
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         this.setState({ initialData: res.data });
         this.setState({ loading: false });
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         this.setState({ loading: false });
       });
   };
@@ -166,7 +166,7 @@ class RegistrationForm extends React.Component {
       </Select>
     );
     const onChange = (e) => {
-      console.log(e);
+      // console.log(e);
     };
 
     const homepageOptions = autoCompleteResult.map((homepage) => (

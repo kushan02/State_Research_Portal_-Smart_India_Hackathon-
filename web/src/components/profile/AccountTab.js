@@ -34,7 +34,7 @@ class Account extends React.Component {
   handleOk = () => {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log("Received values of form: ", values);
+        // console.log("Received values of form: ", values);
         if (values["e-mail address"]) {
           this.setState({ loading: true });
           setTimeout(() => {

@@ -93,10 +93,10 @@ class EditableTable extends React.Component {
         user_id: "12313",
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         let apiResponse = [];
         for (let i in res.data) {
-          console.log(i);
+          // console.log(i);
           apiResponse.push({
             key: i.toString(),
             login:

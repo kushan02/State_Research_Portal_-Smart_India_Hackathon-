@@ -219,7 +219,7 @@ class SearchResult extends Component {
                                             end: max
                                         })}
                                         onValueChange={function (value) {
-                                            console.log("current value: ", value);
+                                            // console.log("current value: ", value);
                                             document.getElementsByClassName(
                                                 "css-1e195do e1atnqi30"
                                             )[0].innerHTML = value[0];
@@ -446,7 +446,7 @@ class SearchResult extends Component {
                                                         key={item.id}
                                                     >
                                                         <ResultList key={item._id}>
-                                                            {console.log(item)}
+                                                            {/* {console.log(item)} */}
                                                             <div className="search-result">
                                                                 <div className="search-result-title">
                                                                     <a href={"/paper-details/" + item._id}>

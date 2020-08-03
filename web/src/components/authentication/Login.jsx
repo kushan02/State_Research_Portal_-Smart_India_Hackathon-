@@ -31,7 +31,7 @@ class NormalLoginForm extends React.Component {
     handleConformPasswordOk = () => {
         this.props.form.validateFieldsAndScroll(['e-mail address'], (err, values) => {
             if (!err) {
-                console.log("Received values of form: ", values);
+                // console.log("Received values of form: ", values);
                 if (values["e-mail address"]) {
                     this.setState({loadingConformPassword: true});
                     setTimeout(() => {
@@ -61,10 +61,10 @@ class NormalLoginForm extends React.Component {
                     user_email: values.email,
                     password: values.password,
                 }).then((res) => {
-                    console.log(res.status);
-                    console.log(res.config.data);
+                    // console.log(res.status);
+                    // console.log(res.config.data);
                     if (res.status === 200) {
-                        console.log(res);
+                        // console.log(res);
                         this.setState({loading: false});
                         message.success("Login successful. Redirecting you to homepage...");
                         // localStorage.setItem('login-data', JSON.stringify(res.config.data));
@@ -86,9 +86,9 @@ class NormalLoginForm extends React.Component {
                 })
                     .catch((error) => {
                         if (error.response) {
-                            console.log(error.response.data);
-                            console.log(error.response.status);
-                            console.log(error.response.headers);
+                            // console.log(error.response.data);
+                            // console.log(error.response.status);
+                            // console.log(error.response.headers);
 
                             if (error.response.status === 401) {
                                 this.setState({incorrectPasswordMessage: true});
@@ -103,13 +103,13 @@ class NormalLoginForm extends React.Component {
                         }
                     });
 
-                console.log("Received values of form: ", values);
+                // console.log("Received values of form: ", values);
             }
         });
     };
 
     responseGoogle = (response) => {
-        console.log(response);
+        // console.log(response);
         if ("profileObj" in response) {
             let user_name = response["profileObj"]["name"];
             var name_split = user_name.toLowerCase().split(" ");
