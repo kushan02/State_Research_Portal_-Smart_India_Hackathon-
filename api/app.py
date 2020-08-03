@@ -72,6 +72,51 @@ def get_all_papers_by_author_name(author_name):
     return json.dumps(res['hits']['hits'])
 
 
+@app.route('/api/users/<user_id>/link/', methods=['POST'])
+@cross_origin()
+def link_papers_to_user(user_id):
+    print(user_id)
+    if request.method == 'POST':
+        paper_data = (request.json)
+        print("Paper link request", paper_data)
+        paper_ids = paper_data['paper_ids']
+        author_name = paper_data["author_name"]
+        print(author_name)
+        print(paper_ids)
+
+        for paper_id in paper_ids:
+            author_paper_body = {
+                "query": {
+                    "match": {
+                        "_id": paper_id
+                    }
+                }
+            }
+
+            res = es.search(index="research_portal", body=author_paper_body)
+
+            author_dict = res['hits']['hits'][0]['_source']['authors']
+
+            print(author_dict)
+
+            for author in author_dict:
+                if author['name'] == author_name:
+                    author['author_id'] = user_id
+                    break
+
+            print(author_dict)
+
+            updated_body = {
+                "doc": {
+                    "authors": author_dict
+                }
+            }
+
+            es.update(index="research_portal", doc_type="research_papers", id=paper_id, body=updated_body)
+
+    return 'Papers linked with user successfully', 200
+
+
 @app.route('/api/security-logs/', methods=['POST'])
 @cross_origin()
 def get_security_logs():
