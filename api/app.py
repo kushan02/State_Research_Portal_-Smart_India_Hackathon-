@@ -57,6 +57,21 @@ def get_paper_details():
     return json.dumps(res)
 
 
+@app.route('/api/papers/<author_name>/', methods=['GET', 'POST'])
+@cross_origin()
+def get_all_papers_by_author_name(author_name):
+    print(author_name)
+    body = {
+        "query": {
+            "match": {
+                "authors.name.keyword": author_name
+            }
+        }
+    }
+    res = es.search(index='research_portal', body=body)
+    return json.dumps(res['hits']['hits'])
+
+
 @app.route('/api/security-logs/', methods=['POST'])
 @cross_origin()
 def get_security_logs():

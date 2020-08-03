@@ -13,35 +13,35 @@ import {
   Typography,
   Tooltip,
   AutoComplete,
-  Checkbox,
-  Skeleton,
+    Checkbox,
+    Skeleton,
 } from "antd";
 
 import axios from "axios";
 import constants from "../../constants";
 
-const { Title, Paragraph, Text } = Typography;
+const {Title, Paragraph, Text} = Typography;
 
-const { Option } = Select;
+const {Option} = Select;
 
 function IsJsonString(str) {
-  try {
-    JSON.parse(str);
-  } catch (e) {
-    return false;
-  }
-  return true;
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
 }
 
 const selectBefore = (
-  <Select defaultValue="Http://" style={{ width: 90 }}>
-    <Option value="Http://">Http://</Option>
-    <Option value="Https://">Https://</Option>
-  </Select>
+    <Select defaultValue="Http://" style={{width: 90}}>
+        <Option value="Http://">Http://</Option>
+        <Option value="Https://">Https://</Option>
+    </Select>
 );
 const selectAfter = (
-  <Select defaultValue=".com" style={{ width: 80 }}>
-    <Option value=".com">.com</Option>
+    <Select defaultValue=".com" style={{width: 80}}>
+        <Option value=".com">.com</Option>
     <Option value=".jp">.jp</Option>
     <Option value=".cn">.cn</Option>
     <Option value=".org">.org</Option>
@@ -77,43 +77,13 @@ class RegistrationForm extends React.Component {
     autoCompleteResult: [],
     initialData: {},
     loading: true,
-    updateLoading:false
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let updatedName=values.name
         // console.log("Received values of form: ", values);
-        let requestBody = {
-          name: values.name,
-          // password: values.password,
-          email: localStorage.getItem("user_email") || "",
-          institute: values.institute,
-          city: values.city,
-          phone_number: values.phone || "",
-          homepage: values.homepage || "",
-          interests: JSON.stringify({ interests: values.areaOfInterest }) || "",
-        };
-        console.log(requestBody);
-        this.setState({ updateLoading: true });
-
-        axios
-          .post(constants.flaskServerUrl + "profile/update", requestBody)
-          .then((res) => {
-            console.log(res)
-            this.loadData();
-            localStorage.setItem("user_name", updatedName);
-            this.setState({ updateLoading: false });
-            window.location.reload();
-
-          })
-          .catch((error) => {
-            console.log(error) 
-            this.setState({ updateLoading: false });
-
-          });
       }
     });
   };
@@ -334,18 +304,14 @@ class RegistrationForm extends React.Component {
               }
             >
               {getFieldDecorator("areaOfInterest", {
-                // initialValue: JSON.parse( this.state.initialData.user_interests).interests || "",
-                initialValue: IsJsonString(
-                  this.state.initialData.user_interests
-                )
-                  ? JSON.parse(this.state.initialData.user_interests).interests
-                  : undefined,
-                rules: [
-                  {
-                    required: true,
-                    message: "Please enter your area of Interest",
-                  },
-                ],
+                  // initialValue: JSON.parse( this.state.initialData.user_interests).interests || "",
+                  initialValue: IsJsonString(this.state.initialData.user_interests) ? JSON.parse(this.state.initialData.user_interests).interests : "",
+                  rules: [
+                      {
+                          required: true,
+                          message: "Please enter your area of Interest",
+                      },
+                  ],
               })(
                 <Select
                   mode="tags"
@@ -440,17 +406,10 @@ class RegistrationForm extends React.Component {
                 Update
               </Button>
             </Form.Item> */}
-            <div
-              style={{
-                width: "100%",
-                textAlign: "center",
-                marginBottom: "20px",
-              }}
-            >
-              <Button type="primary" htmlType="submit" loading={this.state.updateLoading}>
+            <div style={{width:"100%",textAlign:"center",marginBottom:"20px"}}>
+            <Button type="primary" htmlType="submit">
                 Update
-              </Button>
-            </div>
+              </Button></div>
           </Form>
         )}
 
