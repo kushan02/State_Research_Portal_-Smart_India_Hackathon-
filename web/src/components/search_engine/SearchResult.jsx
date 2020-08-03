@@ -212,7 +212,7 @@ class SearchResult extends Component {
                                         title="Year of Publication"
                                         defaultValue={(min, max) => ({
                                             start: min,
-                                            end: max
+                                            end: 2020
                                         })}
                                         rangeLabels={(min, max) => ({
                                             start: min,

@@ -93,6 +93,20 @@ class RegistrationForm extends React.Component {
     }
   };
 
+  safelyParseJSON (json) {
+    // This function cannot be optimised, it's best to
+    // keep it small!
+    let parsed
+  
+    try {
+      parsed = JSON.parse(json)
+    } catch (e) {
+      // Oh well, but whatever...
+    }
+  
+    return parsed // Could be undefined!
+  }
+
   validateToNextPassword = (rule, value, callback) => {
     const { form } = this.props;
     if (value && this.state.confirmDirty) {
@@ -295,7 +309,7 @@ class RegistrationForm extends React.Component {
               }
             >
               {getFieldDecorator("areaOfInterest", {
-                initialValue: JSON.parse( this.state.initialData.user_interests).interests || "",
+                initialValue: this.safelyParseJSON( this.state.initialData.user_interests).interests || "",
                 rules: [
                   {
                     required: true,
