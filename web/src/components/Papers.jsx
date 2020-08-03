@@ -11,6 +11,14 @@ import { Layout, Menu, Breadcrumb, Icon } from "antd";
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
+function IsJsonString(str) {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
+}
 
 const columns = [
   {
@@ -33,9 +41,27 @@ function onChange(pagination, filters, sorter, extra) {
 export class Papers extends Component {
   state = {
     data: [],
+    authorData: {},
+    paperLoading: false,
   };
-
+  loadData = () => {
+    this.setState({ loading: true });
+    axios
+      .post(constants.flaskServerUrl + "account/details", {
+        user_email: localStorage.getItem("user_email") || "",
+      })
+      .then((res) => {
+        console.log(res.data);
+        this.setState({ authorData: res.data });
+      })
+      .catch((error) => {
+        // console.log(error);
+      });
+  };
   componentDidMount() {
+    this.loadData();
+    this.setState({ paperLoading: true });
+
     axios
       .get(
         constants.flaskServerUrl +
@@ -43,16 +69,25 @@ export class Papers extends Component {
           localStorage.getItem("user_id")
       )
       .then((res) => {
+        this.setState({ paperLoading: false });
         // console.log(res.data.map(i=>i._source));
         this.setState({ data: res.data.map((i) => i._source) });
-        console.log(
-          res.data.map((i) => i._source.citationCount).reduce((x, y) => x + y)
-        );
+        // console.log(
+        //   res.data.map((i) => i._source.citationCount).reduce((x, y) => x + y)
+        // );
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        this.setState({ paperLoading: false });
+
+        console.error(err);
+      });
   }
 
   render() {
+    let interestArr = IsJsonString(this.state.authorData.user_interests)
+      ? JSON.parse(this.state.authorData.user_interests).interests
+      : [];
+    console.log(interestArr);
     return (
       <React.Fragment>
         <div className="navbar-outer-div">
@@ -97,18 +132,29 @@ export class Papers extends Component {
             <div className="papers-inner-div-1">
               <div className="papers-inner-left-div">
                 <h1>
-                  Kushan Mehta
+                  {localStorage.getItem("user_name")}
                   {/* <Button size="large" id="contact-button">
                   Contact
                 </Button> */}
                 </h1>
-                Charotar University of Science and Technology | CHARUSAT
+                {/* Charotar University of Science and Technology | CHARUSAT */}
+                {localStorage.getItem("user_institute")}
+
                 <br />
-                BTech - Computer Science & Engineering
                 <br />
-                <br />
-                <h3>Skills</h3>
-                <Tag style={{ padding: "3px", borderRadius: "7px" }}>
+                {/* BTech - Computer Science & Engineering */}
+              
+                {interestArr.length != 0 && <h3>Interests</h3>}
+
+                {interestArr.length != 0 &&
+                  interestArr.map((i) => {
+                    return (
+                      <Tag style={{ padding: "3px", borderRadius: "7px" }}>
+                        {i}
+                      </Tag>
+                    );
+                  })}
+                {/* <Tag style={{ padding: "3px", borderRadius: "7px" }}>
                   Data Analytics
                 </Tag>
                 <Tag style={{ padding: "3px", borderRadius: "7px" }}>
@@ -116,7 +162,7 @@ export class Papers extends Component {
                 </Tag>
                 <Tag style={{ padding: "3px", borderRadius: "7px" }}>
                   Data Mining
-                </Tag>
+                </Tag> */}
               </div>
 
               <div className="papers-inner-right-div">
@@ -158,10 +204,11 @@ export class Papers extends Component {
                         }}
                       />
                       <h3>
-                        {this.state.data.length != 0 &&
-                          this.state.data
-                            .map((i) => i.citationCount)
-                            .reduce((x, y) => x + y)}
+                        {this.state.data.length == 0
+                          ? "0"
+                          : this.state.data
+                              .map((i) => i.citationCount)
+                              .reduce((x, y) => x + y)}
                       </h3>
                     </div>
                   </Col>
@@ -181,7 +228,11 @@ export class Papers extends Component {
           <div className="papers-outer-div">
             <div className="papers-inner-div">
               <h1>Papers</h1>
-              <Table columns={columns} dataSource={this.state.data} />
+              <Table
+                columns={columns}
+                dataSource={this.state.data}
+                loading={this.state.paperLoading}
+              />
             </div>
           </div>
         </div>

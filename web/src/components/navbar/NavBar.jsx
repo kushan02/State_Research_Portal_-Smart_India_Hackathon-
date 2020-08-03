@@ -100,6 +100,11 @@ class NavBar extends Component {
                     </Link>
                   </Menu.Item> */}
                                         <Menu.Item key="2">
+                                            <Link to="/claim-papers">
+                                                <a>Claim Papers</a>
+                                            </Link>
+                                        </Menu.Item>
+                                        <Menu.Item key="2">
                                             <Link to="/profile/info">
                                                 <a>Settings</a>
                                             </Link>

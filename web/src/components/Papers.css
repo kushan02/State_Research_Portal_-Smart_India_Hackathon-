@@ -65,7 +65,9 @@
     flex:1
 }
 .papers-inner-right-div{
-    flex:1
+    flex:1;
+    width: 100%;
+    
 
 }
 .papers-outer-div a{
@@ -99,4 +101,12 @@
     width: 200px;
   background: rgba(255, 255, 255, 0.2);
   margin: 16px;
+}
+
+@media only screen and (max-width:800px) {
+    .papers-inner-div-1{
+        /* background-color: red; */
+        flex-direction: column;
+    
+    }
 }

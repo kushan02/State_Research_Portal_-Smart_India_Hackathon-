@@ -82,6 +82,32 @@ class RegistrationForm extends React.Component {
             // console.log(res);
             // console.log(res.data);
             this.props.history.push("/claim-papers");
+            axios
+              .post(constants.flaskServerUrl + "login/", {
+                user_email: values.email,
+                password: values.password,
+              })
+              .then((res2) => {
+                console.log(res2);
+                this.setState({ loading: false });
+                message.success(
+                  "Login successful. Redirecting you to homepage..."
+                );
+                // localStorage.setItem('login-data', JSON.stringify(res.config.data));
+                localStorage.setItem("login-data", true);
+                localStorage.setItem("user_email", values.email);
+                localStorage.setItem("user_name", res2.data.user_name);
+                localStorage.setItem("user_id", res2.data.user_id);
+                localStorage.setItem(
+                  "user_institute",
+                  res2.data.user_institute
+                );
+
+                this.props.history.push("/claim-papers");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
           })
           .catch((error) => {
             if (error.response) {

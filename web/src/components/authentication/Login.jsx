@@ -64,7 +64,7 @@ class NormalLoginForm extends React.Component {
                     // console.log(res.status);
                     // console.log(res.config.data);
                     if (res.status === 200) {
-                        // console.log(res);
+                        console.log(res);
                         this.setState({loading: false});
                         message.success("Login successful. Redirecting you to homepage...");
                         // localStorage.setItem('login-data', JSON.stringify(res.config.data));

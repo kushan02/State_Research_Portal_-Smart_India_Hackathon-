@@ -77,14 +77,14 @@ class RegistrationForm extends React.Component {
     autoCompleteResult: [],
     initialData: {},
     loading: true,
-    updateLoading:false
+    updateLoading: false,
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let updatedName=values.name
+        let updatedName = values.name;
         // console.log("Received values of form: ", values);
         let requestBody = {
           name: values.name,
@@ -102,17 +102,15 @@ class RegistrationForm extends React.Component {
         axios
           .post(constants.flaskServerUrl + "profile/update", requestBody)
           .then((res) => {
-            console.log(res)
+            console.log(res);
             this.loadData();
             localStorage.setItem("user_name", updatedName);
             this.setState({ updateLoading: false });
             window.location.reload();
-
           })
           .catch((error) => {
-            console.log(error) 
+            console.log(error);
             this.setState({ updateLoading: false });
-
           });
       }
     });
@@ -385,14 +383,14 @@ class RegistrationForm extends React.Component {
                 </AutoComplete>
               )}
             </Form.Item>
-
+            {/* 
             <Form.Item size="large" label="Bio">
               <TextArea
                 placeholder="Write about yourself"
                 allowClear
                 onChange={onChange}
               />
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item label="Phone Number">
               {getFieldDecorator("phone", {
@@ -447,7 +445,11 @@ class RegistrationForm extends React.Component {
                 marginBottom: "20px",
               }}
             >
-              <Button type="primary" htmlType="submit" loading={this.state.updateLoading}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={this.state.updateLoading}
+              >
                 Update
               </Button>
             </div>

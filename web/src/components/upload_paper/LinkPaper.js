@@ -23,6 +23,7 @@ export class LinkPaper extends Component {
     loading: false,
     data: [],
     selectedIds: [],
+    linkLoading: false,
   };
   loadData = () => {
     this.setState({ loading: true });
@@ -50,6 +51,8 @@ export class LinkPaper extends Component {
     this.loadData();
   }
   handleLink = () => {
+    this.setState({ linkLoading: true });
+
     axios
       .post(
         constants.flaskServerUrl +
@@ -59,10 +62,15 @@ export class LinkPaper extends Component {
         {
           paper_ids: this.state.selectedIds,
           author_name: localStorage.getItem("user_name") || "",
+          author_institution: localStorage.getItem("user_institute"),
         }
       )
       .then((res) => {
         console.log(res);
+        this.setState({ linkLoading: false });
+        message.success(
+          "Papers have been linked with your account successfully."
+        );
         this.props.history.push(
           "/author/" +
             localStorage.getItem("user_name").replace(/\s+/g, "-") +
@@ -71,6 +79,8 @@ export class LinkPaper extends Component {
         );
       })
       .catch((error) => {
+        this.setState({ linkLoading: false });
+
         console.log(error);
       });
   };
@@ -102,8 +112,8 @@ export class LinkPaper extends Component {
           research papers allows you to showcase your research work on your
           author page. You can select all the papers that belong to you that you
           want to claim as your work
-          <br/>
-          <br/>
+          <br />
+          <br />
           <Table
             loading={this.state.loading}
             rowSelection={this.rowSelection}
@@ -115,6 +125,7 @@ export class LinkPaper extends Component {
               type="primary"
               style={{ margin: "10px" }}
               onClick={this.handleLink}
+              loading={this.state.linkLoading}
             >
               Claim Papers
             </Button>
