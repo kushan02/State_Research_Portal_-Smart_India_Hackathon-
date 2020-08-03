@@ -30,7 +30,9 @@ def login_user():
         cursor = db.cursor()
 
         params = [user_email]
-        cursor.execute("SELECT user_email, user_password, user_name, user_id FROM account WHERE user_email=%s", params)
+        cursor.execute(
+            "SELECT user_email, user_password, user_name, user_id, user_institute FROM account WHERE user_email=%s",
+            params)
 
         db_pass = cursor.fetchone()
 
@@ -39,7 +41,7 @@ def login_user():
 
         try:
             if db_pass is not None and db_pass[1] and bool(flask_bcrypt.check_password_hash(db_pass[1], password)):
-                details = {"user_name": db_pass[2], "user_id": db_pass[3]}
+                details = {"user_name": db_pass[2], "user_id": db_pass[3], "user_institute": db_pass[4]}
                 return jsonify(details), 200
             else:
                 return 'Invalid Credentials', 401

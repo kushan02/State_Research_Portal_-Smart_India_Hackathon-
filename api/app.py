@@ -97,6 +97,7 @@ def link_papers_to_user(user_id):
         print("Paper link request", paper_data)
         paper_ids = paper_data['paper_ids']
         author_name = paper_data["author_name"]
+        author_institution = paper_data["author_institution"]
         print(author_name)
         print(paper_ids)
 
@@ -118,6 +119,7 @@ def link_papers_to_user(user_id):
             for author in author_dict:
                 if author['name'] == author_name:
                     author['author_id'] = user_id
+                    author["author_institution"] = author_institution
                     break
 
             print(author_dict)

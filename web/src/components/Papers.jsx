@@ -161,9 +161,7 @@ export class Papers extends Component {
                                                 <h4>
                                                     Publications:
                                                     {
-                                                        this.state.data.length == 0 ? " 0" : " " + this.state.data
-                                                            .map((i) => i.citationCount)
-                                                            .reduce((x, y) => x + y)
+                                                        this.state.data.length == 0 ? " 0" : " " + this.state.data.length
                                                     }
                                                 </h4>
                                             </div>
@@ -181,7 +179,11 @@ export class Papers extends Component {
                                                     }}
                                                 />
                                                 <h4>
-                                                    Citations: 1,276</h4>
+                                                    Citations:{
+                                                        this.state.data.length == 0 ? " 0" : " " + this.state.data
+                                                            .map((i) => i.citationCount)
+                                                            .reduce((x, y) => x + y)
+                                                    }</h4>
                                             </div>
                                         </Col>
                                     </Row>
