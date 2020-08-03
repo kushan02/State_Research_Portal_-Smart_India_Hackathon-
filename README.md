@@ -11,6 +11,8 @@
 
 #### Link to short video animation to get an overview about the project - https://drive.google.com/file/d/1L_AHG4Ig7luqe7AUHcrouu17vG5Pr_bn/view
 
+#### Link to presentation(ppt) of the project - https://docs.google.com/presentation/d/1iASPMnIX97l4U6I1ch2IhZpGrnFL5J_15X5b5Z9NyyA/edit?usp=sharing
+
 ### Organization: 
 Government of Andhra Pradesh
 
