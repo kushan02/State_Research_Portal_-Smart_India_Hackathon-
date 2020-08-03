@@ -64,6 +64,7 @@ def update_user_profile():
         db.commit()
         cursor.close()
         db.close()
+        return 'Profile updated successfully!', 200
     # if count > 0:
     #     cursor.close()
     #     db.close()
