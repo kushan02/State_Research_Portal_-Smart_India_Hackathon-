@@ -119,7 +119,7 @@ class RegistrationForm extends React.Component {
         user_email: localStorage.getItem("user_email") || "",
       })
       .then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         this.setState({ initialData: res.data });
         this.setState({ loading: false });
       })
@@ -295,7 +295,7 @@ class RegistrationForm extends React.Component {
               }
             >
               {getFieldDecorator("areaOfInterest", {
-                initialValue: this.state.initialData.user_interests || "",
+                initialValue: JSON.parse( this.state.initialData.user_interests).interests || "",
                 rules: [
                   {
                     required: true,
