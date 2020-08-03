@@ -159,7 +159,7 @@ export class Details extends Component {
                       </div>
                     </>
                   )}
-                  {this.state.paperApiData.topics && (
+                  {this.state.paperApiData.topics && this.state.paperApiData.topics.length!=0 && (
                     <>
                       <h2>Topics</h2>
                       <div style={{ marginLeft: "-5px" }}>

@@ -454,10 +454,10 @@ class SearchResult extends Component {
                                                                     </a>
                                                                 </div>
                                                                 <div>
-                                                                    {item.authors.map(author => (
+                                                                    {item.authors.map((author,index) => (
                                                                         <span
                                                                             className="search-result-author"
-                                                                            key={author.name}
+                                                                            key={index}
                                                                         >
                                       {author.name + ""}
                                     </span>
