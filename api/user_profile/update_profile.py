@@ -6,18 +6,18 @@ import flask_bcrypt
 import pymysql
 import re
 
-registration_bp = Blueprint('registration_bp', __name__)
+update_profile_bp = Blueprint('update_profile_bp', __name__)
 
 
 # CORS(registration_bp, resources={r'/api/*': {"origins": "*"}})
 
 
-@registration_bp.route('/api/registration/', methods=['POST'])
-def register_user():
+@update_profile_bp.route('/api/profile/update', methods=['POST'])
+def update_user_profile():
     data = (request.json)
     print(data)
     for field in data:
-        if field in ['name', 'email', 'password', 'city', 'institute']:
+        if field in ['name', 'email', 'city', 'institute']:
             # Check if the data field is not empty
             if not data[field]:
                 return 'Please fill the required fields!', 400
@@ -49,39 +49,44 @@ def register_user():
     if not is_valid_email:
         return 'Email address is invalid', 400
 
-        # password validation
-    pass_hash = flask_bcrypt.generate_password_hash(data['password'])
-    pass_hash = pass_hash.decode("utf-8")
-
     # Establish database connection
     # db = pymysql.connect("156.67.222.22", "u133349638_sih_team", "?/lL@YA$", "u133349638_researchportal")
     db = pymysql.connect("sql284.main-hosting.eu", "u133349638_sih_team", "?/lL@YA$", "u133349638_researchportal")
     cursor = db.cursor()
-    params = [data['email']]
-    count = cursor.execute('SELECT user_email FROM account WHERE user_email=%s', params)
-    if count > 0:
-        cursor.close()
-        db.close()
-        return 'Email address already exists! Please logging in.', 409
 
-    cursor.close()
-    cursor = db.cursor()
-
-    # use prepared statement to avoid sql injection
     try:
-        params = [
-            data['email'], data['name'], pass_hash, data['institute'], data['city'], data['homepage'],
-            data['phone_number'], data['interests']
-        ]
+        params = [data['name'], data['institute'], data['city'], data['homepage'],
+                  data['phone_number'], data['interests'], data["email"]]
+
         sql = cursor.execute(
-            "INSERT INTO `account` (`user_email`, `user_name`, `user_password`, `user_institute`, `user_city`, `user_homepage`, `user_phone_number`, `user_interests`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
+            'UPDATE account SET `user_name`=%s, `user_institute`=%s, `user_city`=%s, `user_homepage`=%s, `user_phone_number`=%s, `user_interests`=%s WHERE `user_email`=%s',
             params)
         db.commit()
         cursor.close()
         db.close()
-        return 'Your account has been successfully created!', 200
+    # if count > 0:
+    #     cursor.close()
+    #     db.close()
+    #     return 'Email address already exists! Please logging in.', 409
+
+    # cursor.close()
+    # cursor = db.cursor()
+    #
+    # # use prepared statement to avoid sql injection
+    # try:
+    #     params = [
+    #         data['email'], data['name'], pass_hash, data['institute'], data['city'], data['homepage'],
+    #         data['phone_number'], data['interests']
+    #     ]
+    #     sql = cursor.execute(
+    #         "INSERT INTO `account` (`user_email`, `user_name`, `user_password`, `user_institute`, `user_city`, `user_homepage`, `user_phone_number`, `user_interests`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
+    #         params)
+    #     db.commit()
+    #     cursor.close()
+    #     db.close()
+    #     return 'Your profile details have been updated successfully', 200
     except:
         db.rollback()
         cursor.close()
         db.close()
-        return 'Error in registration occurred!', 400
+        return 'Error in updating profile!', 400

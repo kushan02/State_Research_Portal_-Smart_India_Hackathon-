@@ -8,6 +8,7 @@ import re
 from authentication.login import login_bp as authentication_bp_login
 from authentication.registration import registration_bp as authentication_bp_registration
 from user_profile.account_details import account_details_bp
+from user_profile.update_profile import update_profile_bp
 
 app = Flask(__name__)
 app.secret_key = "fJm6?7Sb]+4Am0@4'^>E(@*2311_`4?}u]L1Z$^lV=y1Yk-Dkro4@C)*$']D>~sd)np57s>U"
@@ -17,6 +18,7 @@ CORS(app, resources={r'/api/*': {"origins": "*"}}, support_credentials=True)
 app.register_blueprint(authentication_bp_login)
 app.register_blueprint(authentication_bp_registration)
 app.register_blueprint(account_details_bp)
+app.register_blueprint(update_profile_bp)
 
 
 # def connect_elasticsearch(url='localhost', port=9200):
