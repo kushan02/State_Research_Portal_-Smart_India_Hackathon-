@@ -72,6 +72,7 @@ class NormalLoginForm extends React.Component {
                         localStorage.setItem("user_email", values.email);
                         localStorage.setItem("user_name", res.data.user_name);
                         localStorage.setItem("user_id", res.data.user_id);
+                        localStorage.setItem("user_institute", res.data.user_institute);
 
                         setTimeout(() => {
                             this.props.history.push("/");

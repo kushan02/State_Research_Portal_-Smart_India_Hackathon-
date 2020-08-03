@@ -133,7 +133,8 @@ class SearchResult extends Component {
                                         "title.autosuggest",
                                         "title.english",
                                         "title.search",
-                                        "fieldsOfStudy"
+                                        "fieldsOfStudy",
+                                        "authors.author_institution"
                                     ]}
                                     fieldWeights={[
                                         90,
@@ -154,6 +155,7 @@ class SearchResult extends Component {
                                         1,
                                         1,
                                         1,
+                                        10,
                                         10
                                     ]}
                                     fuzziness={1}
@@ -235,7 +237,7 @@ class SearchResult extends Component {
                                         filterLabel="Published"
                                         interval={2}
                                         react={{
-                                            and: ["search", "fieldsOfStudy", "journals", "authors", "relatedTopics", "result"]
+                                            and: ["search", "fieldsOfStudy", "journals", "authors", "result", "institution"]
                                         }}
                                         // URLParams={true}
                                         loader="Loading Trend Analysis ..."
@@ -258,9 +260,9 @@ class SearchResult extends Component {
                                         react={{
                                             // and: ['CategoryFilter', 'SearchFilter'],
                                             // and: ["result", "publication-year", "journals", "search"]
-                                            // and: ["search", "publication-year", "journals", "authors", "relatedTopics", "result"]
+                                            // and: ["search", "publication-year", "journals", "authors", "result", "institution"]
                                             //TODO: Decide whether it should react or show all fields all times
-                                            and: ["search", "publication-year", "fieldsOfStudy", "journals", "authors", "relatedTopics", "result"]
+                                            and: ["search", "publication-year", "fieldsOfStudy", "journals", "authors", "result", "institution"]
 
                                         }}
                                         showFilter={true}
@@ -293,7 +295,7 @@ class SearchResult extends Component {
                                         react={{
                                             // and: ["search"]
                                             // and: ["result", "publication-year", "authors", "search"]
-                                            and: ["search", "publication-year", "fieldsOfStudy", "journals", "authors", "relatedTopics", "result"]
+                                            and: ["search", "publication-year", "fieldsOfStudy", "journals", "authors", "result", "institution"]
 
                                         }}
                                         showFilter={true}
@@ -345,7 +347,7 @@ class SearchResult extends Component {
                                         react={{
                                             // and: ["search"]
                                             // and: ["result", "publication-year", "journals", "search"]
-                                            and: ["search", "publication-year", "fieldsOfStudy", "journals", "authors", "relatedTopics", "result"]
+                                            and: ["search", "publication-year", "fieldsOfStudy", "journals", "authors", "result", "institution"]
 
                                         }}
                                         showFilter={true}
@@ -353,6 +355,33 @@ class SearchResult extends Component {
                                         loader="Loading Authors..."
                                     />
                                 </Card>
+
+                                <Card>
+                                    <MultiList
+                                        loader={
+                                            <Skeleton
+                                                active
+                                                title={false}
+                                                paragraph={{rows: 1, width: "100%"}}
+                                            />
+                                        }
+                                        componentId="institution"
+                                        dataField="authors.author_institution.keyword"
+                                        style={{
+                                            marginBottom: 5
+                                        }}
+                                        title="Institutions"
+                                        react={{
+                                            and: ["search", "publication-year", "fieldsOfStudy", "journals", "authors", "result", "institution"]
+
+                                        }}
+                                        showFilter={true}
+                                        filterLabel="Institution"
+                                        loader="Loading Institutions..."
+                                    />
+                                </Card>
+
+
                             </div>
                             <div className="search-result-results">
                                 <SelectedFilters/>
@@ -371,7 +400,7 @@ class SearchResult extends Component {
                                         queryFormat="or"
                                         react={{
                                             // and: ["result", "publication-year", "journals", "search"]
-                                            and: ["search", "publication-year", "fieldsOfStudy", "journals", "authors", "relatedTopics", "result"]
+                                            and: ["search", "publication-year", "fieldsOfStudy", "journals", "authors", "result", "institution"]
 
                                         }}
                                         showFilter={true}
@@ -434,7 +463,7 @@ class SearchResult extends Component {
                                         size={10}
                                         react={{
                                             // and: ["publication-year", "authors", "journals", "search"]
-                                            and: ["search", "publication-year", "fieldsOfStudy", "journals", "authors", "relatedTopics"]
+                                            and: ["search", "publication-year", "fieldsOfStudy", "journals", "authors", "relatedTopics", "institution"]
 
                                         }}
                                         // renderItem={renderItem}
@@ -454,7 +483,7 @@ class SearchResult extends Component {
                                                                     </a>
                                                                 </div>
                                                                 <div>
-                                                                    {item.authors.map((author,index) => (
+                                                                    {item.authors.map((author, index) => (
                                                                         <span
                                                                             className="search-result-author"
                                                                             key={index}
