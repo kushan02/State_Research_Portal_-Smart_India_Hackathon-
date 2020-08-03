@@ -57,7 +57,7 @@ def get_paper_details():
     return json.dumps(res)
 
 
-@app.route('/api/papers/<author_name>/', methods=['GET', 'POST'])
+@app.route('/api/papers/author/name/<author_name>/', methods=['GET', 'POST'])
 @cross_origin()
 def get_all_papers_by_author_name(author_name):
     print(author_name)
@@ -68,6 +68,22 @@ def get_all_papers_by_author_name(author_name):
             }
         }
     }
+    res = es.search(index='research_portal', body=body)
+    return json.dumps(res['hits']['hits'])
+
+
+@app.route('/api/papers/author/id/<author_id>/', methods=['GET', 'POST'])
+@cross_origin()
+def get_all_papers_by_author_id(author_id):
+    print(author_id)
+    body = {
+        "query": {
+            "match": {
+                "authors.author_id": author_id
+            }
+        }
+    }
+
     res = es.search(index='research_portal', body=body)
     return json.dumps(res['hits']['hits'])
 
