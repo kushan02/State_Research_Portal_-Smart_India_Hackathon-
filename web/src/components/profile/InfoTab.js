@@ -13,26 +13,35 @@ import {
   Typography,
   Tooltip,
   AutoComplete,
-  Checkbox,
-  Skeleton,
+    Checkbox,
+    Skeleton,
 } from "antd";
 
 import axios from "axios";
 import constants from "../../constants";
 
-const { Title, Paragraph, Text } = Typography;
+const {Title, Paragraph, Text} = Typography;
 
-const { Option } = Select;
+const {Option} = Select;
+
+function IsJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
 
 const selectBefore = (
-  <Select defaultValue="Http://" style={{ width: 90 }}>
-    <Option value="Http://">Http://</Option>
-    <Option value="Https://">Https://</Option>
-  </Select>
+    <Select defaultValue="Http://" style={{width: 90}}>
+        <Option value="Http://">Http://</Option>
+        <Option value="Https://">Https://</Option>
+    </Select>
 );
 const selectAfter = (
-  <Select defaultValue=".com" style={{ width: 80 }}>
-    <Option value=".com">.com</Option>
+    <Select defaultValue=".com" style={{width: 80}}>
+        <Option value=".com">.com</Option>
     <Option value=".jp">.jp</Option>
     <Option value=".cn">.cn</Option>
     <Option value=".org">.org</Option>
@@ -92,20 +101,6 @@ class RegistrationForm extends React.Component {
       callback();
     }
   };
-
-  safelyParseJSON (json) {
-    // This function cannot be optimised, it's best to
-    // keep it small!
-    let parsed
-  
-    try {
-      parsed = JSON.parse(json)
-    } catch (e) {
-      // Oh well, but whatever...
-    }
-  
-    return parsed // Could be undefined!
-  }
 
   validateToNextPassword = (rule, value, callback) => {
     const { form } = this.props;
@@ -309,13 +304,14 @@ class RegistrationForm extends React.Component {
               }
             >
               {getFieldDecorator("areaOfInterest", {
-                initialValue: this.safelyParseJSON( this.state.initialData.user_interests).interests || "",
-                rules: [
-                  {
-                    required: true,
-                    message: "Please enter your area of Interest",
-                  },
-                ],
+                  // initialValue: JSON.parse( this.state.initialData.user_interests).interests || "",
+                  initialValue: IsJsonString(this.state.initialData.user_interests) ? JSON.parse(this.state.initialData.user_interests).interests : "",
+                  rules: [
+                      {
+                          required: true,
+                          message: "Please enter your area of Interest",
+                      },
+                  ],
               })(
                 <Select
                   mode="tags"
@@ -402,14 +398,18 @@ class RegistrationForm extends React.Component {
                       </Checkbox>,
                     )}
                   </Form.Item> */}
-            <Form.Item
+            {/* <Form.Item
               {...tailFormItemLayout}
               className="registration-register-button"
             >
               <Button type="primary" htmlType="submit">
                 Update
               </Button>
-            </Form.Item>
+            </Form.Item> */}
+            <div style={{width:"100%",textAlign:"center",marginBottom:"20px"}}>
+            <Button type="primary" htmlType="submit">
+                Update
+              </Button></div>
           </Form>
         )}
 
@@ -466,7 +466,6 @@ class Info extends React.Component {
             <Descriptions title="User Profile" layout="horizontal" bordered>
                 <Descriptions.Item label="Name" span={3}>First-Name Last-Name</Descriptions.Item>
                 <Descriptions.Item label="Billing Mode" span={3}>Prepaid</Descriptions.Item>
-
                 <Descriptions.Item label="Status" span={3}>
                     <Badge status="processing" text="Online" />
                 </Descriptions.Item>
