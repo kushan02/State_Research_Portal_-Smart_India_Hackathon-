@@ -78,17 +78,15 @@ export class Papers extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="navbar-outer-div">
-          <NavBar />
-          <br/>
+          <div className="navbar-outer-div">
+              <NavBar/>
+              <br/>
 
-        </div>
-
-
+          </div>
 
 
-        <div style={{paddingTop:"90px", width:'80%'}}>
-            <div style={{
+          <div style={{paddingTop: "90px", width: '80%', marginRight: "auto", marginLeft: "auto"}}>
+              {/*         <div style={{
                 marginLeft:'98%',
                 width:'25%',
                 height:'57px'
@@ -104,10 +102,10 @@ export class Papers extends Component {
                         Student, Devang Patel Institute of Advance Technology , CSE
                     </Card>
                 </div>
-            </div>
+            </div>*/}
 
             <div className="profile-main-outer-div" style={{
-                marginTop: '-57px'
+                // marginTop: '-57px'
             }}>
                 <div className="papers-inner-div">
                     <h1>Kushan Mehta<Button size="large" id="contact-button">Contact</Button></h1>
